@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
+  <title id="title">Lantern network dashboard</title>
+  <desc id="desc">A dark, teal-accented terminal dashboard showing network counts, activity, health, recent events, and common services.</desc>
+  <rect width="1400" height="780" rx="18" fill="#0c1015"/>
+  <rect x="16" y="16" width="1368" height="748" rx="12" fill="#141a21" stroke="#394652" stroke-width="2"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="48" y="62" fill="#3fbdbf" font-size="25" font-weight="700" letter-spacing="2">LANTERN</text>
+    <text x="119" y="62" fill="#9dacb8" font-size="17"></text>
+    <text x="820" y="60" fill="#9dacb8" font-size="17">en0 · 192.168.1.0/24</text>
+    <text x="1130" y="60" fill="#60707b" font-size="17">NORMAL</text>
+    <circle cx="1253" cy="53" r="6" fill="#67be7e"/>
+    <text x="1271" y="60" fill="#67be7e" font-size="17" font-weight="700">SCANNING</text>
+    <line x1="35" y1="82" x2="1365" y2="82" stroke="#3fbdbf" stroke-width="3"/>
+
+    <text x="55" y="122" fill="#3fbdbf" font-size="15" font-weight="700" letter-spacing="2">NETWORK</text>
+    <line x1="40" y1="133" x2="410" y2="133" stroke="#394652"/>
+    <text x="72" y="180" fill="#67be7e" font-size="30" font-weight="700">24</text>
+    <text x="128" y="178" fill="#9dacb8" font-size="18">online</text>
+    <text x="72" y="222" fill="#60707b" font-size="30" font-weight="700">3</text>
+    <text x="128" y="220" fill="#9dacb8" font-size="18">offline</text>
+    <text x="260" y="180" fill="#e0af5a" font-size="30" font-weight="700">2</text>
+    <text x="316" y="178" fill="#9dacb8" font-size="18">unknown</text>
+    <text x="260" y="222" fill="#679fd6" font-size="30" font-weight="700">4</text>
+    <text x="316" y="220" fill="#9dacb8" font-size="18">changed</text>
+    <rect x="62" y="256" width="325" height="18" rx="7" fill="#1d2730"/>
+    <rect x="62" y="256" width="247" height="18" rx="7" fill="#3fbdbf"/>
+    <text x="62" y="303" fill="#9dacb8" font-size="15">Discovering hosts</text>
+    <text x="334" y="303" fill="#e1e8ed" font-size="15" font-weight="700">76%</text>
+
+    <text x="455" y="122" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">DEVICE ACTIVITY</text>
+    <line x1="440" y1="133" x2="925" y2="133" stroke="#394652"/>
+    <polyline points="465,250 492,235 519,239 546,218 573,189 600,160 627,178 654,145 681,164 708,132 735,116 762,142 789,108 816,109 843,92 870,107"
+              fill="none" stroke="#3fbdbf" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M465 250 L492 235 L519 239 L546 218 L573 189 L600 160 L627 178 L654 145 L681 164 L708 132 L735 116 L762 142 L789 108 L816 109 L843 92 L870 107 L870 270 L465 270 Z" fill="#3fbdbf" opacity="0.08"/>
+    <text x="465" y="295" fill="#60707b" font-size="15">Discovery</text>
+    <text x="580" y="295" fill="#9dacb8" font-size="15">TCP · DNS · mDNS · SSDP</text>
+    <text x="465" y="322" fill="#60707b" font-size="15">Active</text>
+    <text x="580" y="322" fill="#e1e8ed" font-size="15">18 probes · 24 found</text>
+
+    <text x="970" y="122" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">HEALTH</text>
+    <line x1="955" y1="133" x2="1355" y2="133" stroke="#394652"/>
+    <text x="982" y="178" fill="#9dacb8" font-size="17">Gateway</text>
+    <text x="1230" y="178" fill="#67be7e" font-size="17" font-weight="700">ONLINE</text>
+    <text x="982" y="216" fill="#9dacb8" font-size="17">Discovery</text>
+    <text x="1288" y="216" fill="#679fd6" font-size="17" font-weight="700">5</text>
+    <text x="982" y="254" fill="#9dacb8" font-size="17">Warnings</text>
+    <text x="1288" y="254" fill="#e0af5a" font-size="17" font-weight="700">2</text>
+    <text x="982" y="292" fill="#9dacb8" font-size="17">Scan queue</text>
+    <text x="1276" y="292" fill="#e1e8ed" font-size="17" font-weight="700">14</text>
+
+    <text x="55" y="384" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">RECENT EVENTS</text>
+    <line x1="40" y1="395" x2="925" y2="395" stroke="#394652"/>
+    <text x="62" y="441" fill="#60707b" font-size="16">12:42</text>
+    <text x="135" y="441" fill="#e0af5a" font-size="16" font-weight="700">NEW</text>
+    <text x="252" y="441" fill="#e1e8ed" font-size="17">Living room TV appeared</text>
+    <text x="660" y="441" fill="#60707b" font-size="16">192.168.1.48</text>
+    <rect x="46" y="459" width="866" height="1" fill="#1d2730"/>
+    <text x="62" y="498" fill="#60707b" font-size="16">12:39</text>
+    <text x="135" y="498" fill="#679fd6" font-size="16" font-weight="700">CHANGED</text>
+    <text x="252" y="498" fill="#e1e8ed" font-size="17">Home NAS · HTTPS added</text>
+    <text x="660" y="498" fill="#60707b" font-size="16">192.168.1.20</text>
+    <rect x="46" y="516" width="866" height="1" fill="#1d2730"/>
+    <text x="62" y="555" fill="#60707b" font-size="16">12:35</text>
+    <text x="135" y="555" fill="#60707b" font-size="16" font-weight="700">OFFLINE</text>
+    <text x="252" y="555" fill="#e1e8ed" font-size="17">Office printer</text>
+    <text x="660" y="555" fill="#60707b" font-size="16">last seen 8m ago</text>
+
+    <text x="970" y="384" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">COMMON SERVICES</text>
+    <line x1="955" y1="395" x2="1355" y2="395" stroke="#394652"/>
+    <rect x="982" y="438" width="252" height="20" rx="4" fill="#273d52"/>
+    <rect x="982" y="438" width="230" height="20" rx="4" fill="#679fd6" opacity="0.8"/>
+    <text x="992" y="454" fill="#f0fafa" font-size="14">HTTPS</text><text x="1250" y="454" fill="#e1e8ed" font-size="14">12</text>
+    <rect x="982" y="483" width="180" height="20" rx="4" fill="#679fd6" opacity="0.65"/>
+    <text x="992" y="499" fill="#f0fafa" font-size="14">SSH</text><text x="1178" y="499" fill="#e1e8ed" font-size="14">7</text>
+    <rect x="982" y="528" width="112" height="20" rx="4" fill="#679fd6" opacity="0.5"/>
+    <text x="992" y="544" fill="#f0fafa" font-size="14">SMB</text><text x="1110" y="544" fill="#e1e8ed" font-size="14">3</text>
+
+    <line x1="35" y1="698" x2="1365" y2="698" stroke="#394652"/>
+    <text x="50" y="735" fill="#3fbdbf" font-size="16" font-weight="700">r</text><text x="70" y="735" fill="#9dacb8" font-size="16">Rescan</text>
+    <text x="168" y="735" fill="#3fbdbf" font-size="16" font-weight="700">2</text><text x="188" y="735" fill="#9dacb8" font-size="16">Devices</text>
+    <text x="300" y="735" fill="#3fbdbf" font-size="16" font-weight="700">^P</text><text x="330" y="735" fill="#9dacb8" font-size="16">Commands</text>
+    <text x="465" y="735" fill="#3fbdbf" font-size="16" font-weight="700">?</text><text x="485" y="735" fill="#9dacb8" font-size="16">Help</text>
+    <text x="1180" y="735" fill="#60707b" font-size="16">27 devices · 2 alerts</text>
+  </g>
+</svg>

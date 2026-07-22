@@ -1,0 +1,54 @@
+# Lantern example configuration. Generate the platform-local file with:
+#   lantern config init
+
+# Optional. When absent, Lantern chooses the most likely active IPv4 interface.
+# interface = "eth0"
+# subnet = "192.168.1.0/24"
+
+scan_mode = "normal" # quick | normal | deep | watch | passive
+refresh_interval_secs = 30
+
+# Conservative network budgets.
+connect_timeout_ms = 220
+dns_timeout_ms = 750
+concurrency = 96
+host_limit = 1024
+
+retention_days = 90
+# Also: catppuccin_mocha, catppuccin_latte, dracula, nord, midnight_blue, acid, paper_light,
+# high_contrast, monochrome, color_blind.
+theme = "lantern_dark"
+# Nerd Font glyphs are never enabled automatically; use nerd only for a configured terminal font.
+icons = "unicode"      # nerd | unicode | ascii
+animations = true
+# Detailed rows add type, MAC/source, last-seen, and service endpoints.
+compact_rows = false
+mouse = true
+
+# HTTP sends one bounded GET /, reads at most 16 KiB, and follows no redirects.
+http_metadata = false
+# Reserved for the certificate metadata adapter; doctor reports unsupported builds.
+tls_metadata = false
+
+log_level = "info"
+# vendor_database = "/path/to/vendors.csv"
+
+visible_columns = [
+  "status",
+  "name",
+  "ip",
+  "vendor",
+  "latency",
+  "services",
+  "last_seen",
+]
+
+[enabled_protocols]
+local = true
+tcp = true
+reverse_dns = true
+arp = true
+icmp = false
+mdns = true
+ssdp = true
+netbios = false
