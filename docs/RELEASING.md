@@ -8,13 +8,13 @@ request in the project tap.
 ## One-time publication setup
 
 1. Create the canonical public GitHub repository and push the project.
-2. Replace every `github.com/example/wireseer` and repository placeholder with the canonical URL.
+2. Replace every `github.com/mr-lexus/wireseer` and repository placeholder with the canonical URL.
 3. Create a public tap repository named `homebrew-tap` under the same owner when possible. Homebrew
-   then exposes it as `OWNER/tap`.
-4. Initialize that repository with `brew tap-new OWNER/tap`, or create the recommended `Formula/`
+   then exposes it as `mr-lexus/tap`.
+4. Initialize that repository with `brew tap-new mr-lexus/tap`, or create the recommended `Formula/`
    directory and tap test workflows manually.
 5. In the Wireseer repository, set the Actions variable `HOMEBREW_TAP_REPOSITORY` to the full
-   `OWNER/homebrew-tap` name.
+   `mr-lexus/homebrew-tap` name.
 6. Add an Actions secret named `HOMEBREW_TAP_TOKEN`. Use a fine-grained token limited to that tap
    repository with contents and pull-request write access.
 7. Protect the default branches and require CI/tap checks before merging.
@@ -32,7 +32,7 @@ exists:
   package, `SHA256SUMS`, the generated formula, and provenance attestations.
 - **The project Homebrew tap** is the primary package-manager channel for macOS and Linux. The
   release opens a formula PR automatically; after its tap checks pass, merging/pulling it makes
-  `brew install OWNER/tap/wireseer` available. The tap can publish optimized bottles through the
+  `brew install mr-lexus/tap/wireseer` available. The tap can publish optimized bottles through the
   standard `brew test-bot`/`brew pr-pull` workflow.
 
 Publishing the crate on crates.io can later add `cargo install wireseer-tui` as a third source-build
@@ -101,16 +101,16 @@ From a clean branch:
    ```
 
 10. Review all GitHub release assets, compare their digests with `SHA256SUMS`, and verify one
-    attestation with `gh attestation verify ASSET -R OWNER/REPOSITORY`.
+    attestation with `gh attestation verify ASSET -R mr-lexus/wireseer`.
 11. Review and merge the generated tap pull request after its `brew audit`, source build, and
     `brew test` checks succeed on supported macOS and Linux runners.
 12. Verify the public path on both Apple Silicon and Intel macOS when available:
 
     ```bash
-    brew install OWNER/tap/wireseer
+    brew install mr-lexus/tap/wireseer
     wireseer --version
     wireseer doctor
-    brew test OWNER/tap/wireseer
+    brew test mr-lexus/tap/wireseer
     brew uninstall wireseer
     ```
 
@@ -127,7 +127,7 @@ mkdir -p target/homebrew-preview
 cp target/package/wireseer-tui-0.1.0.crate target/homebrew-preview/wireseer-0.1.0.tar.gz
 ./scripts/generate-homebrew-formula.sh \
   0.1.0 \
-  OWNER/REPOSITORY \
+  mr-lexus/wireseer \
   target/homebrew-preview/wireseer-0.1.0.tar.gz \
   target/homebrew-preview/wireseer.rb
 ruby -c target/homebrew-preview/wireseer.rb
@@ -136,9 +136,9 @@ ruby -c target/homebrew-preview/wireseer.rb
 After the matching release URL exists, copy the formula into a local tap and run:
 
 ```bash
-brew install --build-from-source OWNER/tap/wireseer
-brew test OWNER/tap/wireseer
-brew audit --new --formula OWNER/tap/wireseer
+brew install --build-from-source mr-lexus/tap/wireseer
+brew test mr-lexus/tap/wireseer
+brew audit --new --formula mr-lexus/tap/wireseer
 ```
 
 Homebrew core additionally requires project notability, a stable tagged release, and successful

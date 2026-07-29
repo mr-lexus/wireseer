@@ -61,7 +61,7 @@ Run `wireseer doctor` on the target machine for the authoritative capability rep
 Homebrew is the primary distribution path for macOS and Linux. Once the project tap is published:
 
 ```bash
-brew install OWNER/tap/wireseer
+brew install mr-lexus/tap/wireseer
 wireseer doctor
 wireseer
 ```

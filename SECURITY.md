@@ -34,6 +34,6 @@ not introduce an unbounded read or redirect loop.
 
 Stable releases publish `SHA256SUMS` for the source package, generated Homebrew formula, and every
 native binary archive. Public GitHub releases also publish build-provenance attestations verifiable
-with `gh attestation verify ASSET -R OWNER/REPOSITORY`. Direct-download binaries are not Apple
+with `gh attestation verify ASSET -R mr-lexus/wireseer`. Direct-download binaries are not Apple
 Developer ID- or Authenticode-signed in version 0.1.0; verify the checksum and provenance before
 running them. Homebrew installs build from the immutable, checksummed source archive.

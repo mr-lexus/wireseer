@@ -8,7 +8,7 @@ packaging path for macOS and Linux. The minimum supported Rust version for sourc
 After the project tap is published, install the formula directly from the tap:
 
 ```bash
-brew install OWNER/tap/wireseer
+brew install mr-lexus/tap/wireseer
 ```
 
 This form trusts only the requested formula and automatically adds the tap. If the tap has already
@@ -40,7 +40,7 @@ Homebrew intentionally does not delete application data. Review the paths printe
 With Rust 1.85 or newer installed:
 
 ```bash
-git clone https://github.com/OWNER/REPOSITORY.git wireseer
+git clone https://github.com/mr-lexus/wireseer.git wireseer
 cd wireseer
 cargo install --locked --path .
 wireseer doctor
@@ -78,8 +78,8 @@ On macOS or Linux, select the archive matching `uname -m`, download it with `SHA
 and place the binary on `PATH`. For example, for Apple Silicon and version 0.1.0:
 
 ```bash
-curl -LO https://github.com/OWNER/REPOSITORY/releases/download/v0.1.0/wireseer-0.1.0-aarch64-apple-darwin.tar.gz
-curl -LO https://github.com/OWNER/REPOSITORY/releases/download/v0.1.0/SHA256SUMS
+curl -LO https://github.com/mr-lexus/wireseer/releases/download/v0.1.0/wireseer-0.1.0-aarch64-apple-darwin.tar.gz
+curl -LO https://github.com/mr-lexus/wireseer/releases/download/v0.1.0/SHA256SUMS
 grep 'wireseer-0.1.0-aarch64-apple-darwin.tar.gz' SHA256SUMS | shasum -a 256 -c -
 tar -xzf wireseer-0.1.0-aarch64-apple-darwin.tar.gz
 install -m 0755 wireseer-0.1.0-aarch64-apple-darwin/wireseer "$HOME/.local/bin/wireseer"
@@ -92,8 +92,8 @@ For Windows ARM64 in PowerShell, for example:
 
 ```powershell
 $asset = "wireseer-0.1.0-aarch64-pc-windows-msvc.zip"
-Invoke-WebRequest "https://github.com/OWNER/REPOSITORY/releases/download/v0.1.0/$asset" -OutFile $asset
-Invoke-WebRequest "https://github.com/OWNER/REPOSITORY/releases/download/v0.1.0/SHA256SUMS" -OutFile SHA256SUMS
+Invoke-WebRequest "https://github.com/mr-lexus/wireseer/releases/download/v0.1.0/$asset" -OutFile $asset
+Invoke-WebRequest "https://github.com/mr-lexus/wireseer/releases/download/v0.1.0/SHA256SUMS" -OutFile SHA256SUMS
 Get-FileHash $asset -Algorithm SHA256
 Select-String $asset SHA256SUMS
 Expand-Archive $asset -DestinationPath .
@@ -105,7 +105,7 @@ run. Move `wireseer.exe` into a directory on the user `PATH` after verification.
 Public GitHub releases also carry a signed build-provenance attestation. With GitHub CLI installed:
 
 ```bash
-gh attestation verify wireseer-0.1.0-aarch64-apple-darwin.tar.gz -R OWNER/REPOSITORY
+gh attestation verify wireseer-0.1.0-aarch64-apple-darwin.tar.gz -R mr-lexus/wireseer
 ```
 
 Release archives are not Apple Developer ID- or Authenticode-signed in version 0.1.0. Homebrew is
@@ -160,7 +160,7 @@ guaranteed to understand a database written by a newer release, so back up befor
 wireseer --version
 wireseer doctor
 brew info wireseer
-brew reinstall --build-from-source OWNER/tap/wireseer
+brew reinstall --build-from-source mr-lexus/tap/wireseer
 ```
 
 For formula failures, include the Wireseer version, macOS/Linux version, CPU architecture, and the

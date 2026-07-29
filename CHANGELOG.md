@@ -5,7 +5,7 @@ dates use ISO 8601.
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-07-26
+## [0.1.0] - 2026-07-29
 
 ### Added
 
@@ -21,5 +21,5 @@ dates use ISO 8601.
 - Source release, eight native binary archives, SHA-256 checksums, provenance attestations, and
   Homebrew formula/tap automation.
 
-[Unreleased]: https://github.com/example/wireseer/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/example/wireseer/releases/tag/v0.1.0
+[Unreleased]: https://github.com/mr-lexus/wireseer/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/mr-lexus/wireseer/releases/tag/v0.1.0
