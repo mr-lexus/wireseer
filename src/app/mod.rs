@@ -301,12 +301,12 @@ impl AppState {
             let old_type = device.device_type;
             let old_confidence = device.confidence;
             let mut changed = false;
-            if let Some(vendor) = device.mac.as_deref().and_then(|mac| database.lookup(mac))
-                && device.vendor.as_deref() != Some(vendor)
-            {
-                device.vendor = Some(vendor.to_string());
-                enriched += 1;
-                changed = true;
+            if let Some(vendor) = device.mac.as_deref().and_then(|mac| database.lookup(mac)) {
+                if device.vendor.as_deref() != Some(vendor) {
+                    device.vendor = Some(vendor.to_string());
+                    enriched += 1;
+                    changed = true;
+                }
             }
             device.recalculate_fingerprint();
             if device.device_type != old_type || device.confidence != old_confidence {
