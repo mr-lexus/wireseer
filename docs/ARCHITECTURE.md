@@ -1,6 +1,6 @@
 # Architecture overview
 
-Lantern is an event-driven application with one owner for user-visible mutable state.
+Wireseer is an event-driven application with one owner for user-visible mutable state.
 
 ```text
 interface selection ──> scan coordinator ──> bounded providers

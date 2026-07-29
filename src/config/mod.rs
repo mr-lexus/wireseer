@@ -18,7 +18,7 @@ pub struct AppPaths {
 impl AppPaths {
     #[must_use]
     pub fn discover() -> Self {
-        let (config_dir, data_dir, cache_dir) = ProjectDirs::from("dev", "Lantern", "Lantern")
+        let (config_dir, data_dir, cache_dir) = ProjectDirs::from("dev", "Wireseer", "wireseer")
             .map_or_else(
                 || {
                     let base = std::env::current_dir().unwrap_or_else(|_| PathBuf::from("."));
@@ -34,8 +34,8 @@ impl AppPaths {
             );
         Self {
             config_file: config_dir.join("config.toml"),
-            database_file: data_dir.join("lantern.sqlite3"),
-            log_file: data_dir.join("lantern.log"),
+            database_file: data_dir.join("wireseer.sqlite3"),
+            log_file: data_dir.join("wireseer.log"),
             config_dir,
             data_dir,
             cache_dir,
@@ -98,7 +98,7 @@ impl ScanMode {
 #[serde(rename_all = "snake_case")]
 pub enum ThemeName {
     #[default]
-    LanternDark,
+    WireseerDark,
     CatppuccinMocha,
     CatppuccinLatte,
     Dracula,
@@ -113,7 +113,7 @@ pub enum ThemeName {
 
 impl ThemeName {
     pub const ALL: [Self; 11] = [
-        Self::LanternDark,
+        Self::WireseerDark,
         Self::CatppuccinMocha,
         Self::CatppuccinLatte,
         Self::Dracula,
@@ -129,7 +129,7 @@ impl ThemeName {
     #[must_use]
     pub const fn label(self) -> &'static str {
         match self {
-            Self::LanternDark => "Lantern Dark",
+            Self::WireseerDark => "Wireseer Dark",
             Self::CatppuccinMocha => "Catppuccin Mocha",
             Self::CatppuccinLatte => "Catppuccin Latte",
             Self::Dracula => "Dracula",
@@ -146,7 +146,7 @@ impl ThemeName {
     #[must_use]
     pub const fn description(self) -> &'static str {
         match self {
-            Self::LanternDark => "balanced teal on charcoal",
+            Self::WireseerDark => "cold cyan signal on graphite",
             Self::CatppuccinMocha => "soft pastel dark",
             Self::CatppuccinLatte => "calm pastel light",
             Self::Dracula => "purple and cyan dark",
@@ -241,7 +241,7 @@ impl Default for Config {
             concurrency: 96,
             host_limit: 1_024,
             retention_days: 90,
-            theme: ThemeName::LanternDark,
+            theme: ThemeName::WireseerDark,
             icons: IconMode::Unicode,
             animations: true,
             compact_rows: false,

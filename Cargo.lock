@@ -1071,42 +1071,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lantern-tui"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "clap",
- "crossterm",
- "csv",
- "directories",
- "futures",
- "fuzzy-matcher",
- "hickory-resolver",
- "if-addrs",
- "insta",
- "ipnet",
- "parking_lot",
- "quick-xml",
- "ratatui",
- "reqwest",
- "rusqlite",
- "serde",
- "serde_json",
- "socket2",
- "tempfile",
- "thiserror 2.0.19",
- "tokio",
- "tokio-util",
- "toml",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "unicode-width 0.2.0",
- "uuid",
-]
-
-[[package]]
 name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2677,6 +2641,42 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df79d97927682d2fd8adb29682d1140b343be4ac0f08fd68b7765d9c059d3945"
 dependencies = [
  "memchr",
+]
+
+[[package]]
+name = "wireseer-tui"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "crossterm",
+ "csv",
+ "directories",
+ "futures",
+ "fuzzy-matcher",
+ "hickory-resolver",
+ "if-addrs",
+ "insta",
+ "ipnet",
+ "parking_lot",
+ "quick-xml",
+ "ratatui",
+ "reqwest",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "socket2",
+ "tempfile",
+ "thiserror 2.0.19",
+ "tokio",
+ "tokio-util",
+ "toml",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "unicode-width 0.2.0",
+ "uuid",
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
-# Contributing to Lantern
+# Contributing to Wireseer
 
-Thank you for improving Lantern. Preserve its core promise: calm, explainable, local-only network
+Thank you for improving Wireseer. Preserve its core promise: calm, explainable, local-only network
 visibility without offensive behavior.
 
 ## Development
@@ -17,7 +17,14 @@ fixtures, in-memory SQLite, mocks, or loopback sockets. They must never scan the
 
 For visual changes, test at 160×40, 110×30, 80×24, and 54×12. Confirm focused, selected, empty,
 loading, error, command-palette, help, monochrome, and ASCII states. Identity and IP must survive
-before secondary columns.
+before secondary columns. Regenerate the release screenshots with:
+
+```bash
+cargo run --example render_screenshots -- docs/screenshots
+```
+
+The screenshot generator must continue to use only the built-in network-free demo state and IETF
+documentation addresses. Never capture a developer or user's inventory.
 
 ## Provider checklist
 
@@ -45,3 +52,4 @@ tests from both an empty database and the previous schema. Never rewrite a relea
 Keep changes cohesive, explain the user-visible outcome, list the validation commands, and include
 an updated screenshot/SVG for layout work. Note traffic/privacy changes explicitly.
 
+Release preparation and Homebrew packaging are documented in [docs/RELEASING.md](docs/RELEASING.md).

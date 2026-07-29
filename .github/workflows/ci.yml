@@ -25,3 +25,36 @@ jobs:
       - run: cargo test --all-targets
       - run: cargo build --release
 
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85.0
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --all-targets --locked
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Verify source package
+        run: cargo package --locked
+      - name: Verify generated screenshots
+        run: |
+          cargo run --locked --example render_screenshots -- target/release-screenshots
+          diff -ru docs/screenshots target/release-screenshots
+      - name: Verify Homebrew formula generation
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          version=$(sed -n 's/^version = "\([^"]*\)"/\1/p' Cargo.toml | head -n 1)
+          mkdir -p target/homebrew-preview
+          cp "target/package/wireseer-tui-$version.crate" "target/homebrew-preview/wireseer-$version.tar.gz"
+          ./scripts/generate-homebrew-formula.sh \
+            "$version" \
+            "$REPOSITORY" \
+            "target/homebrew-preview/wireseer-$version.tar.gz" \
+            target/homebrew-preview/wireseer.rb
+          ruby -c target/homebrew-preview/wireseer.rb

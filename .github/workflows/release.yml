@@ -1,0 +1,209 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  source-package:
+    name: Source package and formula
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@1.85.0
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Validate release
+        env:
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: ./scripts/release-check.sh "${TAG#v}" "$REPOSITORY"
+      - name: Assemble source and Homebrew artifacts
+        env:
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          mkdir -p dist
+          cp "target/package/wireseer-tui-$version.crate" "dist/wireseer-$version.tar.gz"
+          ./scripts/generate-homebrew-formula.sh \
+            "$version" \
+            "$REPOSITORY" \
+            "dist/wireseer-$version.tar.gz" \
+            dist/wireseer.rb
+          ruby -c dist/wireseer.rb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wireseer-release-source
+          path: dist/
+          if-no-files-found: error
+
+  binaries:
+    name: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            target: x86_64-apple-darwin
+            archive: tar
+          - runner: macos-15
+            target: aarch64-apple-darwin
+            archive: tar
+          - runner: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            archive: tar
+          - runner: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+            archive: tar
+          - runner: ubuntu-22.04
+            target: x86_64-unknown-linux-musl
+            archive: tar
+            packages: musl-tools
+          - runner: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-musl
+            archive: tar
+            packages: musl-tools
+          - runner: windows-2022
+            target: x86_64-pc-windows-msvc
+            archive: zip
+          - runner: windows-11-arm
+            target: aarch64-pc-windows-msvc
+            archive: zip
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85.0
+        with:
+          targets: ${{ matrix.target }}
+      - name: Install native build tools
+        if: ${{ matrix.packages != '' }}
+        run: sudo apt-get update && sudo apt-get install --yes ${{ matrix.packages }}
+      - name: Build macOS release binary
+        if: runner.os == 'macOS'
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "11.0"
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Build release binary
+        if: runner.os != 'macOS'
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: Smoke-test Unix binary
+        if: runner.os != 'Windows'
+        run: ./target/${{ matrix.target }}/release/wireseer --version
+      - name: Package Unix binary
+        if: matrix.archive == 'tar'
+        env:
+          TAG: ${{ github.ref_name }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          version="${TAG#v}"
+          archive="wireseer-$version-$TARGET"
+          mkdir -p "staging/$archive" dist
+          cp "target/$TARGET/release/wireseer" "staging/$archive/"
+          cp README.md LICENSE CHANGELOG.md "staging/$archive/"
+          chmod 0755 "staging/$archive/wireseer"
+          tar -C staging -czf "dist/$archive.tar.gz" "$archive"
+      - name: Smoke-test Windows binary
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: '& "./target/${{ matrix.target }}/release/wireseer.exe" --version'
+      - name: Package Windows binary
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        env:
+          TAG: ${{ github.ref_name }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          $version = $env:TAG.TrimStart('v')
+          $archive = "wireseer-$version-$env:TARGET"
+          New-Item -ItemType Directory -Force "staging/$archive", dist | Out-Null
+          Copy-Item "target/$env:TARGET/release/wireseer.exe" "staging/$archive/"
+          Copy-Item README.md, LICENSE, CHANGELOG.md "staging/$archive/"
+          Compress-Archive -Path "staging/$archive" -DestinationPath "dist/$archive.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wireseer-release-${{ matrix.target }}
+          path: dist/
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub release
+    needs: [source-package, binaries]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wireseer-release-*
+          path: dist
+          merge-multiple: true
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum wireseer-* > SHA256SUMS
+      - name: Attest release assets
+        if: ${{ github.event.repository.visibility == 'public' }}
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/*
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes
+
+  update-tap:
+    name: Open Homebrew tap update
+    needs: publish-release
+    if: ${{ vars.HOMEBREW_TAP_REPOSITORY != '' }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: wireseer-release-source
+          path: dist
+      - name: Open tap update pull request
+        env:
+          GH_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          TAP_REPOSITORY: ${{ vars.HOMEBREW_TAP_REPOSITORY }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          test -n "$GH_TOKEN"
+          gh auth setup-git
+          gh repo clone "$TAP_REPOSITORY" tap
+          branch="wireseer-$TAG"
+          git -C tap switch -c "$branch"
+          mkdir -p tap/Formula
+          cp dist/wireseer.rb tap/Formula/wireseer.rb
+          git -C tap config user.name "github-actions[bot]"
+          git -C tap config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C tap add Formula/wireseer.rb
+          git -C tap commit -m "wireseer $TAG"
+          git -C tap push --set-upstream origin "$branch"
+          gh pr create \
+            --repo "$TAP_REPOSITORY" \
+            --head "$branch" \
+            --title "wireseer $TAG" \
+            --body "Automated Wireseer formula update for $TAG. Review the source URL and SHA-256, then let the tap test-bot build, bottle, and audit it."

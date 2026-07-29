@@ -6,14 +6,15 @@ use crate::config::{IconMode, ScanMode};
 
 #[derive(Debug, Parser)]
 #[command(
-    name = "lantern",
+    name = "wireseer",
     version,
+    before_help = crate::CLI_BANNER,
     about = "Discover, inspect, and export devices on your local network",
-    long_about = "Lantern is a local-first LAN inventory tool. Run it without a command for the interactive TUI, or use a subcommand for scripts, automation, and data export.\n\nHuman-readable output uses tables. JSON, XML, and CSV modes write only serialized data to the selected destination so other programs can consume it safely.",
+    long_about = "Wireseer is a local-first LAN inventory tool. Run it without a command for the interactive TUI, or use a subcommand for scripts, automation, and data export.\n\nHuman-readable output uses tables. JSON, XML, and CSV modes write only serialized data to the selected destination so other programs can consume it safely.",
     propagate_version = true
 )]
 #[command(
-    after_help = "Examples:\n  lantern                         Open the interactive TUI\n  lantern devices --format json  Read inventory as JSON\n  lantern export --kind devices --format xml --output devices.xml\n  lantern scan --mode quick --format csv > scan.csv\n\nLantern performs conservative discovery only on networks you are authorized to inspect. CLI help is currently available in English."
+    after_help = "Examples:\n  wireseer                         Open the interactive TUI\n  wireseer devices --format json  Read inventory as JSON\n  wireseer export --kind devices --format xml --output devices.xml\n  wireseer scan --mode quick --format csv > scan.csv\n\nWireseer performs conservative discovery only on networks you are authorized to inspect. CLI help is currently available in English."
 )]
 pub struct Cli {
     /// Use an alternate TOML configuration file.
@@ -28,7 +29,7 @@ pub struct Cli {
         global = true,
         value_enum,
         value_name = "MODE",
-        env = "LANTERN_ICONS"
+        env = "WIRESEER_ICONS"
     )]
     pub icons: Option<IconMode>,
     #[command(subcommand)]
@@ -83,7 +84,7 @@ pub struct NetworkArgs {
 
 #[derive(Debug, Clone, clap::Args, Default)]
 #[command(
-    after_help = "Examples:\n  lantern scan\n  lantern scan --mode quick --format json\n  lantern scan --subnet 192.168.1.0/24 --format xml --output scan.xml"
+    after_help = "Examples:\n  wireseer scan\n  wireseer scan --mode quick --format json\n  wireseer scan --subnet 192.168.1.0/24 --format xml --output scan.xml"
 )]
 pub struct ScanArgs {
     #[command(flatten)]
@@ -120,7 +121,7 @@ pub enum ExportFormat {
 
 #[derive(Debug, clap::Args)]
 #[command(
-    after_help = "Examples:\n  lantern export --kind devices --format json\n  lantern export --kind alerts --format xml --output alerts.xml\n  lantern export --kind comparison --format csv -o comparison.csv"
+    after_help = "Examples:\n  wireseer export --kind devices --format json\n  wireseer export --kind alerts --format xml --output alerts.xml\n  wireseer export --kind comparison --format csv -o comparison.csv"
 )]
 pub struct ExportArgs {
     /// Serialization format.
@@ -151,7 +152,7 @@ pub enum ExportKind {
 
 #[derive(Debug, clap::Args)]
 #[command(
-    after_help = "Examples:\n  lantern devices\n  lantern devices --online --format json\n  lantern devices --format xml --output devices.xml"
+    after_help = "Examples:\n  wireseer devices\n  wireseer devices --online --format json\n  wireseer devices --format xml --output devices.xml"
 )]
 pub struct DevicesArgs {
     /// Include only devices currently marked online.
@@ -173,7 +174,7 @@ pub struct DevicesArgs {
 
 #[derive(Debug, clap::Args)]
 #[command(
-    after_help = "Examples:\n  lantern history --limit 100\n  lantern history --format json\n  lantern history --format csv --output history.csv"
+    after_help = "Examples:\n  wireseer history --limit 100\n  wireseer history --format json\n  wireseer history --format csv --output history.csv"
 )]
 pub struct HistoryArgs {
     /// Maximum number of newest events to return.
@@ -195,7 +196,7 @@ pub struct HistoryArgs {
 
 #[derive(Debug, clap::Args)]
 #[command(
-    after_help = "Examples:\n  lantern alerts\n  lantern alerts --open --format json\n  lantern alerts --format xml --output alerts.xml"
+    after_help = "Examples:\n  wireseer alerts\n  wireseer alerts --open --format json\n  wireseer alerts --format xml --output alerts.xml"
 )]
 pub struct AlertsArgs {
     /// Include only unresolved alerts.
@@ -236,7 +237,7 @@ pub enum ConfigCommand {
 
 #[derive(Debug, Subcommand)]
 pub enum VendorCommand {
-    /// Validate and copy an IEEE CSV or OUI text file into Lantern's data directory.
+    /// Validate and copy an IEEE CSV or OUI text file into Wireseer's data directory.
     Import { source: PathBuf },
     /// Download the current public IEEE MA-L, MA-M, and MA-S registries.
     Update,
@@ -252,20 +253,21 @@ mod tests {
 
     #[test]
     fn icon_override_is_global_and_explicit() {
-        let before = Cli::try_parse_from(["lantern", "--icons", "nerd"]).expect("before command");
+        let before = Cli::try_parse_from(["wireseer", "--icons", "nerd"]).expect("before command");
         assert_eq!(before.icons, Some(IconMode::Nerd));
 
         let after =
-            Cli::try_parse_from(["lantern", "doctor", "--icons", "ascii"]).expect("after command");
+            Cli::try_parse_from(["wireseer", "doctor", "--icons", "ascii"]).expect("after command");
         assert_eq!(after.icons, Some(IconMode::Ascii));
         assert!(matches!(after.command, Some(Command::Doctor)));
     }
 
     #[test]
     fn structured_formats_and_output_paths_parse_consistently() {
-        let scan =
-            Cli::try_parse_from(["lantern", "scan", "--format", "xml", "--output", "scan.xml"])
-                .expect("scan arguments");
+        let scan = Cli::try_parse_from([
+            "wireseer", "scan", "--format", "xml", "--output", "scan.xml",
+        ])
+        .expect("scan arguments");
         let Some(Command::Scan(scan)) = scan.command else {
             panic!("expected scan command");
         };
@@ -273,7 +275,7 @@ mod tests {
         assert_eq!(scan.output, Some(PathBuf::from("scan.xml")));
 
         let devices = Cli::try_parse_from([
-            "lantern", "devices", "--online", "--format", "json", "-o", "-",
+            "wireseer", "devices", "--online", "--format", "json", "-o", "-",
         ])
         .expect("device arguments");
         let Some(Command::Devices(devices)) = devices.command else {
@@ -291,10 +293,13 @@ mod tests {
         command.write_long_help(&mut output).expect("render help");
         let help = String::from_utf8(output).expect("UTF-8 help");
         for expected in [
+            crate::APP_NAME_UPPER,
+            crate::BRAND_TRACE_UNICODE,
+            "local signal intelligence",
             "interactive TUI",
             "scripts, automation, and data export",
             "JSON, XML, and CSV",
-            "lantern devices --format json",
+            "wireseer devices --format json",
             "alerts",
         ] {
             assert!(help.contains(expected), "missing help text: {expected}");

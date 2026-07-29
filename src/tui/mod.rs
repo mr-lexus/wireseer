@@ -33,6 +33,7 @@ use ratatui::{
 use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
 use crate::{
+    BRAND_PULSE_ASCII, BRAND_PULSE_UNICODE, BRAND_TRACE_ASCII, BRAND_TRACE_UNICODE, TAGLINE,
     alerts::Severity,
     app::{
         AppRuntime, AppState, DeviceFilter, DeviceSort, LogLevel, Overlay, PersistenceEvent, Screen,
@@ -230,7 +231,7 @@ pub fn render(frame: &mut Frame<'_>, state: &AppState) {
     );
     let class = LayoutClass::from_area(area);
     if class == LayoutClass::TooSmall {
-        render_too_small(frame, area, &theme);
+        render_too_small(frame, area, &theme, state.icons);
         return;
     }
     let root = Layout::vertical([
@@ -251,31 +252,36 @@ pub fn render(frame: &mut Frame<'_>, state: &AppState) {
         Screen::Settings => render_settings(frame, root[1], state, &theme, class),
     }
     render_footer(frame, root[2], state, &theme, class);
-    render_overlay(frame, area, state, &theme, class);
+    render_overlay(frame, area, state, &theme);
     render_toast(frame, area, state, &theme);
 }
 
-fn render_too_small(frame: &mut Frame<'_>, area: Rect, theme: &Theme) {
+fn render_too_small(frame: &mut Frame<'_>, area: Rect, theme: &Theme, icon_mode: IconMode) {
     let inner = centered_rect(
         56.min(area.width.saturating_sub(2)),
         8.min(area.height),
         area,
     );
+    let trace = brand_trace(icon_mode);
+    let dimension_separator = if icon_mode == IconMode::Ascii {
+        "x"
+    } else {
+        "×"
+    };
     let text = Text::from(vec![
+        brand_line(trace, theme),
+        Line::from(Span::styled(TAGLINE, Style::default().fg(theme.text_muted))),
         Line::from(Span::styled(
-            "LANTERN",
-            Style::default().fg(theme.accent).bold(),
-        )),
-        Line::from(""),
-        Line::from(Span::styled(
-            "Lantern needs a little more room.",
+            "Wireseer needs a little more room.",
             Style::default().fg(theme.text_primary).bold(),
         )),
         Line::from(format!(
-            "Current terminal: {} × {}",
+            "Current terminal: {} {dimension_separator} {}",
             area.width, area.height
         )),
-        Line::from("Minimum recommended size: 70 × 18"),
+        Line::from(format!(
+            "Minimum recommended size: 70 {dimension_separator} 18"
+        )),
         Line::from(""),
         Line::from(Span::styled(
             "q  Quit",
@@ -319,10 +325,21 @@ fn render_header(
     } else {
         format!(" / {}", state.screen.title().to_uppercase())
     };
-    let left = Line::from(vec![
-        Span::styled(" LANTERN", Style::default().fg(theme.accent).bold()),
-        Span::styled(page, Style::default().fg(theme.text_secondary).bold()),
-    ]);
+    let mut left = branded_name(theme);
+    let trace = if class == LayoutClass::Compact {
+        brand_pulse(state.icons)
+    } else {
+        brand_trace(state.icons)
+    };
+    left.push(Span::styled(
+        format!("  {trace}"),
+        Style::default().fg(theme.border_focused),
+    ));
+    left.push(Span::styled(
+        page,
+        Style::default().fg(theme.text_secondary).bold(),
+    ));
+    let left = Line::from(left);
     let right = if class == LayoutClass::Compact {
         Line::from(vec![
             Span::styled(
@@ -365,6 +382,38 @@ fn render_header(
             .border_type(BorderType::Plain),
         chunks[1],
     );
+}
+
+fn branded_name(theme: &Theme) -> Vec<Span<'static>> {
+    vec![
+        Span::styled(" WIRE", Style::default().fg(theme.text_primary).bold()),
+        Span::styled("SEER", Style::default().fg(theme.accent).bold()),
+    ]
+}
+
+fn brand_line(trace: &'static str, theme: &Theme) -> Line<'static> {
+    let mut spans = branded_name(theme);
+    spans.push(Span::styled(
+        format!("  {trace}"),
+        Style::default().fg(theme.border_focused),
+    ));
+    Line::from(spans)
+}
+
+const fn brand_trace(icon_mode: IconMode) -> &'static str {
+    if matches!(icon_mode, IconMode::Ascii) {
+        BRAND_TRACE_ASCII
+    } else {
+        BRAND_TRACE_UNICODE
+    }
+}
+
+const fn brand_pulse(icon_mode: IconMode) -> &'static str {
+    if matches!(icon_mode, IconMode::Ascii) {
+        BRAND_PULSE_ASCII
+    } else {
+        BRAND_PULSE_UNICODE
+    }
 }
 
 fn render_footer(
@@ -1379,6 +1428,12 @@ fn truncate_cell(value: &str, max_width: usize) -> String {
     result
 }
 
+fn fit_cell(value: &str, width: usize) -> String {
+    let value = truncate_cell(value, width);
+    let padding = width.saturating_sub(UnicodeWidthStr::width(value.as_str()));
+    format!("{value}{}", " ".repeat(padding))
+}
+
 fn render_inspector(frame: &mut Frame<'_>, area: Rect, state: &AppState, theme: &Theme) {
     let Some(device) = state.selected_device() else {
         return;
@@ -1933,7 +1988,7 @@ fn render_alerts(frame: &mut Frame<'_>, area: Rect, state: &AppState, theme: &Th
             body,
             theme,
             "NO ACTIVE ALERTS",
-            "Lantern has not found anything requiring attention.",
+            "Wireseer has not found anything requiring attention.",
             "Baseline differences and discovery failures will appear here.",
         );
         return;
@@ -2247,16 +2302,10 @@ fn render_empty(
     );
 }
 
-fn render_overlay(
-    frame: &mut Frame<'_>,
-    area: Rect,
-    state: &AppState,
-    theme: &Theme,
-    class: LayoutClass,
-) {
+fn render_overlay(frame: &mut Frame<'_>, area: Rect, state: &AppState, theme: &Theme) {
     match state.overlay {
         Overlay::None | Overlay::Search => {}
-        Overlay::Help => render_help(frame, area, state, theme, class),
+        Overlay::Help => render_help(frame, area, state, theme),
         Overlay::CommandPalette => render_palette(frame, area, state, theme),
         Overlay::Filter => render_picker(
             frame,
@@ -2318,7 +2367,7 @@ fn render_overlay(
             vec![
                 Line::from("Choose JSON, XML, or CSV from the CLI:"),
                 Line::from(Span::styled(
-                    "lantern export --format json",
+                    "wireseer export --format json",
                     Style::default().fg(theme.accent),
                 )),
                 Line::from(""),
@@ -2336,7 +2385,7 @@ fn render_overlay(
             "CANCEL SCAN AND QUIT?",
             vec![
                 Line::from("A discovery scan is still active."),
-                Line::from("Lantern will cancel workers and flush history."),
+                Line::from("Wireseer will cancel workers and flush history."),
                 Line::from(""),
                 Line::from(vec![
                     Span::styled("Enter", Style::default().fg(theme.accent).bold()),
@@ -2362,7 +2411,7 @@ fn render_overlay(
                 )),
                 Line::from(""),
                 Line::from(Span::styled(
-                    "Lantern remains usable. Run `lantern doctor` for diagnostics.",
+                    "Wireseer remains usable. Run `wireseer doctor` for diagnostics.",
                     Style::default().fg(theme.text_secondary),
                 )),
                 Line::from(""),
@@ -2403,13 +2452,7 @@ fn render_overlay(
     }
 }
 
-fn render_help(
-    frame: &mut Frame<'_>,
-    area: Rect,
-    state: &AppState,
-    theme: &Theme,
-    class: LayoutClass,
-) {
+fn render_help(frame: &mut Frame<'_>, area: Rect, state: &AppState, theme: &Theme) {
     let screens = [
         ("1", "Dashboard", "Overview, activity, and health"),
         ("2", "Devices", "Inventory and device inspector"),
@@ -2464,77 +2507,229 @@ fn render_help(
     actions.push((
         "Mouse",
         if state.mouse {
-            "Click items / wheel lists / right-click back"
+            "Click / wheel / right-click back"
         } else {
             "Disabled · enable it in Settings"
         },
     ));
 
-    let mut lines = vec![Line::from(vec![
-        Span::styled(
-            format!("{:<38}", "SCREENS"),
-            Style::default().fg(theme.accent).bold(),
-        ),
-        Span::styled(
-            format!("{} / GLOBAL", state.screen.title().to_uppercase()),
-            Style::default().fg(theme.accent).bold(),
-        ),
-    ])];
-    let row_count = screens.len().max(actions.len());
-    for index in 0..row_count {
-        let screen = screens.get(index).copied().unwrap_or(("", "", ""));
-        let action = actions.get(index).copied().unwrap_or(("", ""));
-        lines.push(help_columns_line(screen, action, theme));
-    }
-
-    let width = if class == LayoutClass::Compact {
-        area.width.saturating_sub(2)
+    let widths = HelpColumnWidths::natural(&screens, &actions);
+    let roomy_separator = if state.icons == IconMode::Ascii {
+        " | "
     } else {
-        96.min(area.width.saturating_sub(2))
+        " │ "
     };
-    let height = u16::try_from(row_count)
+    let compact_separator = if state.icons == IconMode::Ascii {
+        " |"
+    } else {
+        " │"
+    };
+    let available_dialog_width = area.width.saturating_sub(2);
+    let available_content_width = usize::from(available_dialog_width.saturating_sub(4));
+    let stacked_height = u16::try_from(screens.len() + actions.len())
         .unwrap_or(u16::MAX)
-        .saturating_add(5)
-        .min(area.height.saturating_sub(2));
+        .saturating_add(7);
+    let stacked_width = widths.left_width().max(widths.right_width());
+    let use_stacked = widths.total_width(roomy_separator) > available_content_width
+        && stacked_width <= available_content_width
+        && stacked_height <= area.height.saturating_sub(2);
+
+    let (lines, content_width, height) = if use_stacked {
+        let mut lines = vec![help_section_header("SCREENS", theme)];
+        lines.extend(
+            screens
+                .iter()
+                .copied()
+                .map(|screen| help_screen_line(screen, widths, theme)),
+        );
+        lines.push(Line::from(""));
+        lines.push(help_section_header(
+            &format!("{} / GLOBAL", state.screen.title().to_uppercase()),
+            theme,
+        ));
+        lines.extend(
+            actions
+                .iter()
+                .copied()
+                .map(|action| help_action_line(action, widths, theme)),
+        );
+        (lines, stacked_width, stacked_height)
+    } else {
+        let separator = if widths.total_width(roomy_separator) <= available_content_width {
+            roomy_separator
+        } else {
+            compact_separator
+        };
+        let widths = widths.fit(available_content_width, separator);
+        let left_width = widths.left_width();
+        let mut lines = vec![Line::from(vec![
+            Span::styled(
+                fit_cell("SCREENS", left_width),
+                Style::default().fg(theme.accent).bold(),
+            ),
+            Span::styled(separator, Style::default().fg(theme.border)),
+            Span::styled(
+                format!("{} / GLOBAL", state.screen.title().to_uppercase()),
+                Style::default().fg(theme.accent).bold(),
+            ),
+        ])];
+        let row_count = screens.len().max(actions.len());
+        for index in 0..row_count {
+            let screen = screens.get(index).copied().unwrap_or(("", "", ""));
+            let action = actions.get(index).copied().unwrap_or(("", ""));
+            lines.push(help_columns_line(screen, action, widths, separator, theme));
+        }
+        let height = u16::try_from(row_count)
+            .unwrap_or(u16::MAX)
+            .saturating_add(5);
+        (lines, widths.total_width(separator), height)
+    };
+
+    let width = u16::try_from(content_width)
+        .unwrap_or(u16::MAX)
+        .saturating_add(4)
+        .min(available_dialog_width);
     render_dialog(
         frame,
         area,
         theme,
         "INPUT REFERENCE",
         lines,
-        (width, height),
+        (width, height.min(area.height.saturating_sub(2))),
     );
+}
+
+#[derive(Debug, Clone, Copy)]
+struct HelpColumnWidths {
+    screen_key: usize,
+    screen_name: usize,
+    screen_description: usize,
+    action_key: usize,
+    action_description: usize,
+}
+
+impl HelpColumnWidths {
+    fn natural(screens: &[(&str, &str, &str)], actions: &[(&str, &str)]) -> Self {
+        Self {
+            screen_key: max_cell_width(screens.iter().map(|screen| screen.0)).saturating_add(1),
+            screen_name: max_cell_width(screens.iter().map(|screen| screen.1)).saturating_add(1),
+            screen_description: max_cell_width(screens.iter().map(|screen| screen.2)),
+            action_key: max_cell_width(actions.iter().map(|action| action.0)).saturating_add(1),
+            action_description: max_cell_width(actions.iter().map(|action| action.1)),
+        }
+    }
+
+    const fn left_width(self) -> usize {
+        self.screen_key + self.screen_name + self.screen_description
+    }
+
+    const fn right_width(self) -> usize {
+        self.action_key + self.action_description
+    }
+
+    fn total_width(self, separator: &str) -> usize {
+        self.left_width() + UnicodeWidthStr::width(separator) + self.right_width()
+    }
+
+    fn fit(mut self, available: usize, separator: &str) -> Self {
+        let fixed = self.screen_key
+            + self.screen_name
+            + self.action_key
+            + UnicodeWidthStr::width(separator);
+        let available_descriptions = available.saturating_sub(fixed);
+        let natural_descriptions = self.screen_description + self.action_description;
+        if available_descriptions >= natural_descriptions {
+            return self;
+        }
+
+        let screen_min = self.screen_description.min(12);
+        let action_min = self.action_description.min(16);
+        if available_descriptions <= screen_min + action_min {
+            self.screen_description = (available_descriptions / 2).min(self.screen_description);
+            self.action_description = available_descriptions
+                .saturating_sub(self.screen_description)
+                .min(self.action_description);
+            return self;
+        }
+
+        let extra = available_descriptions - screen_min - action_min;
+        let screen_capacity = self.screen_description - screen_min;
+        let action_capacity = self.action_description - action_min;
+        let capacity = screen_capacity + action_capacity;
+        let screen_extra = extra
+            .saturating_mul(screen_capacity)
+            .checked_div(capacity)
+            .unwrap_or(0)
+            .min(screen_capacity);
+        self.screen_description = screen_min + screen_extra;
+        self.action_description =
+            action_min + extra.saturating_sub(screen_extra).min(action_capacity);
+        self
+    }
+}
+
+fn max_cell_width<'a>(values: impl Iterator<Item = &'a str>) -> usize {
+    values.map(UnicodeWidthStr::width).max().unwrap_or(0)
+}
+
+fn help_section_header(title: &str, theme: &Theme) -> Line<'static> {
+    Line::from(Span::styled(
+        title.to_string(),
+        Style::default().fg(theme.accent).bold(),
+    ))
+}
+
+fn help_screen_line(
+    screen: (&str, &str, &str),
+    widths: HelpColumnWidths,
+    theme: &Theme,
+) -> Line<'static> {
+    let (key, name, description) = screen;
+    Line::from(vec![
+        Span::styled(
+            fit_cell(key, widths.screen_key),
+            Style::default().fg(theme.accent).bold(),
+        ),
+        Span::styled(
+            fit_cell(name, widths.screen_name),
+            Style::default().fg(theme.text_primary).bold(),
+        ),
+        Span::styled(
+            fit_cell(description, widths.screen_description),
+            Style::default().fg(theme.text_muted),
+        ),
+    ])
+}
+
+fn help_action_line(
+    action: (&str, &str),
+    widths: HelpColumnWidths,
+    theme: &Theme,
+) -> Line<'static> {
+    let (key, description) = action;
+    Line::from(vec![
+        Span::styled(
+            fit_cell(key, widths.action_key),
+            Style::default().fg(theme.accent).bold(),
+        ),
+        Span::styled(
+            fit_cell(description, widths.action_description),
+            Style::default().fg(theme.text_secondary),
+        ),
+    ])
 }
 
 fn help_columns_line(
     screen: (&str, &str, &str),
     action: (&str, &str),
+    widths: HelpColumnWidths,
+    separator: &'static str,
     theme: &Theme,
 ) -> Line<'static> {
-    let (screen_key, screen_name, screen_description) = screen;
-    let (action_key, action_description) = action;
-    Line::from(vec![
-        Span::styled(
-            format!("{screen_key:<3}"),
-            Style::default().fg(theme.accent).bold(),
-        ),
-        Span::styled(
-            format!("{screen_name:<11}"),
-            Style::default().fg(theme.text_primary).bold(),
-        ),
-        Span::styled(
-            format!("{:<24}", truncate_cell(screen_description, 24)),
-            Style::default().fg(theme.text_muted),
-        ),
-        Span::styled(
-            format!("{action_key:<10}"),
-            Style::default().fg(theme.accent).bold(),
-        ),
-        Span::styled(
-            action_description.to_string(),
-            Style::default().fg(theme.text_secondary),
-        ),
-    ])
+    let mut spans = help_screen_line(screen, widths, theme).spans;
+    spans.push(Span::styled(separator, Style::default().fg(theme.border)));
+    spans.extend(help_action_line(action, widths, theme).spans);
+    Line::from(spans)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -2666,11 +2861,11 @@ impl PaletteCommand {
         (
             Self::Doctor,
             "Open diagnostics",
-            "Use `lantern doctor` for capability checks",
+            "Use `wireseer doctor` for capability checks",
         ),
         (
             Self::Quit,
-            "Quit Lantern",
+            "Quit Wireseer",
             "Cancel work and restore the terminal",
         ),
     ];
@@ -2922,7 +3117,7 @@ fn render_theme_picker(frame: &mut Frame<'_>, area: Rect, state: &AppState, them
 
 const fn theme_symbol(name: ThemeName) -> &'static str {
     match name {
-        ThemeName::LanternDark => "◐",
+        ThemeName::WireseerDark => "◈",
         ThemeName::CatppuccinMocha => "◆",
         ThemeName::CatppuccinLatte => "○",
         ThemeName::Dracula => "◇",
@@ -3958,7 +4153,7 @@ fn execute_palette(runtime: &mut AppRuntime) {
         PaletteCommand::Doctor => {
             runtime
                 .state
-                .toast("Run `lantern doctor` outside the TUI", Severity::Info);
+                .toast("Run `wireseer doctor` outside the TUI", Severity::Info);
         }
         PaletteCommand::Quit => {
             if runtime.state.scan.active {
@@ -3995,7 +4190,7 @@ mod tests {
 
     #[test]
     fn explicit_color_themes_override_no_color_but_monochrome_does_not() {
-        let _restore = ColorOutputGuard::enter(ThemeName::LanternDark);
+        let _restore = ColorOutputGuard::enter(ThemeName::WireseerDark);
         let mut colored = String::new();
         SetForegroundColor(CrosstermColor::Red)
             .write_ansi(&mut colored)
@@ -4025,7 +4220,8 @@ mod tests {
             .draw(|frame| render(frame, &state))
             .expect("render");
         let text = buffer_text(terminal.backend().buffer());
-        assert!(text.contains("LANTERN"));
+        assert!(text.contains("WIRESEER"));
+        assert!(text.contains(BRAND_TRACE_UNICODE));
         assert!(text.contains("DEVICE ACTIVITY"));
         assert!(text.contains("RECENT EVENTS"));
         assert!(text.contains("Home NAS"));
@@ -4043,6 +4239,17 @@ mod tests {
         for global in ["q Quit", "? Help", "Ctrl+P Commands", "r Scan"] {
             assert!(text.contains(global), "missing global action: {global}");
         }
+    }
+
+    #[test]
+    fn brand_trace_has_a_safe_ascii_fallback() {
+        assert_eq!(brand_trace(IconMode::Unicode), BRAND_TRACE_UNICODE);
+        assert_eq!(brand_trace(IconMode::Nerd), BRAND_TRACE_UNICODE);
+        assert_eq!(brand_trace(IconMode::Ascii), BRAND_TRACE_ASCII);
+        assert!(BRAND_TRACE_ASCII.is_ascii());
+        assert_eq!(brand_pulse(IconMode::Unicode), BRAND_PULSE_UNICODE);
+        assert_eq!(brand_pulse(IconMode::Ascii), BRAND_PULSE_ASCII);
+        assert!(BRAND_PULSE_ASCII.is_ascii());
     }
 
     #[test]
@@ -4141,7 +4348,7 @@ mod tests {
         let text = buffer_text(terminal.backend().buffer());
         assert!(text.contains("IDENTITY"));
         assert!(text.contains("ADDRESS"));
-        assert!(text.contains("192.168.1.1"));
+        assert!(text.contains("192.0.2.1"));
         assert!(!text.contains("CONF."));
         for global in ["q Quit", "? Help", "Ctrl+P Commands", "r Scan"] {
             assert!(text.contains(global), "missing compact action: {global}");
@@ -4411,14 +4618,14 @@ mod tests {
             KeyEvent::new(KeyCode::Enter, KeyModifiers::NONE),
         );
         assert_eq!(runtime.state.overlay, Overlay::Theme);
-        assert_eq!(runtime.state.theme, ThemeName::LanternDark);
+        assert_eq!(runtime.state.theme, ThemeName::WireseerDark);
 
         handle_key(
             &mut runtime,
             KeyEvent::new(KeyCode::Down, KeyModifiers::NONE),
         );
         assert_eq!(runtime.state.theme, ThemeName::CatppuccinMocha);
-        assert_eq!(runtime.config.theme, ThemeName::LanternDark);
+        assert_eq!(runtime.config.theme, ThemeName::WireseerDark);
         let backend = TestBackend::new(100, 30);
         let mut terminal = Terminal::new(backend).expect("terminal");
         terminal
@@ -4479,7 +4686,7 @@ mod tests {
         assert!(text.contains("Enter Keep"));
         assert!(text.contains("Live preview"));
         assert!(text.contains("saved"));
-        assert!(text.contains("› ◐  Lantern Dark"));
+        assert!(text.contains("› ◈  Wireseer Dark"));
         assert!(text.contains("· ◆  Catppuccin Mocha"));
         assert!(!text.contains('█'));
 
@@ -4551,7 +4758,7 @@ mod tests {
             area,
         );
         assert_eq!(runtime.state.theme, ThemeName::CatppuccinMocha);
-        assert_eq!(runtime.config.theme, ThemeName::LanternDark);
+        assert_eq!(runtime.config.theme, ThemeName::WireseerDark);
 
         handle_terminal_event(
             &mut runtime,
@@ -4564,8 +4771,8 @@ mod tests {
             area,
         );
         assert_eq!(runtime.state.overlay, Overlay::None);
-        assert_eq!(runtime.state.theme, ThemeName::LanternDark);
-        assert_eq!(runtime.config.theme, ThemeName::LanternDark);
+        assert_eq!(runtime.state.theme, ThemeName::WireseerDark);
+        assert_eq!(runtime.config.theme, ThemeName::WireseerDark);
     }
 
     #[test]
@@ -4580,7 +4787,7 @@ mod tests {
         assert_eq!(runtime.state.palette_selected, 0);
         assert_eq!(
             runtime.state.theme_before_preview,
-            Some(ThemeName::LanternDark)
+            Some(ThemeName::WireseerDark)
         );
     }
 
@@ -4608,7 +4815,22 @@ mod tests {
             .expect("render");
         let text = buffer_text(terminal.backend().buffer());
         assert!(text.contains("needs a little more room"));
+        assert!(text.contains(BRAND_TRACE_UNICODE));
         assert!(text.contains("54 × 12"));
+
+        let backend = TestBackend::new(54, 12);
+        let mut terminal = Terminal::new(backend).expect("terminal");
+        let state = demo_state(&Config {
+            icons: IconMode::Ascii,
+            ..Config::default()
+        });
+        terminal
+            .draw(|frame| render(frame, &state))
+            .expect("render ASCII");
+        let text = buffer_text(terminal.backend().buffer());
+        assert!(text.contains(BRAND_TRACE_ASCII));
+        assert!(text.contains("54 x 12"));
+        assert!(!text.contains(BRAND_TRACE_UNICODE));
     }
 
     #[test]
@@ -4650,6 +4872,82 @@ mod tests {
     }
 
     #[test]
+    fn help_keeps_full_descriptions_and_a_column_gutter_when_width_allows() {
+        let backend = TestBackend::new(101, 18);
+        let mut terminal = Terminal::new(backend).expect("terminal");
+        let mut state = demo_state(&Config::default());
+        state.overlay = Overlay::Help;
+        terminal
+            .draw(|frame| render(frame, &state))
+            .expect("render");
+        let text = buffer_text(terminal.backend().buffer());
+        for description in [
+            "Overview, activity, and health",
+            "Inventory and device inspector",
+            "Discovery and change timeline",
+            "Scan and baseline differences",
+            "Appearance and discovery",
+            "Click / wheel / right-click back",
+        ] {
+            assert!(
+                text.contains(description),
+                "help shortened available text: {description}\n{text}"
+            );
+        }
+        let first_row = text
+            .lines()
+            .find(|line| line.contains("Overview, activity, and health"))
+            .expect("first help row");
+        assert!(
+            first_row.contains(" │ "),
+            "missing column gutter: {first_row}"
+        );
+        assert!(first_row.contains("Quit safely"));
+    }
+
+    #[test]
+    fn narrow_tall_help_stacks_sections_without_shortening_them() {
+        let backend = TestBackend::new(80, 24);
+        let mut terminal = Terminal::new(backend).expect("terminal");
+        let mut state = demo_state(&Config::default());
+        state.overlay = Overlay::Help;
+        terminal
+            .draw(|frame| render(frame, &state))
+            .expect("render");
+        let text = buffer_text(terminal.backend().buffer());
+        let lines = text.lines().collect::<Vec<_>>();
+        let screens = lines
+            .iter()
+            .position(|line| line.contains("SCREENS"))
+            .expect("screens section");
+        let actions = lines
+            .iter()
+            .position(|line| line.contains("DASHBOARD / GLOBAL"))
+            .expect("actions section");
+        assert!(
+            actions > screens + 7,
+            "help sections were not stacked:\n{text}"
+        );
+        assert!(text.contains("Inventory and device inspector"));
+        assert!(text.contains("Click / wheel / right-click back"));
+    }
+
+    #[test]
+    fn short_standard_help_uses_a_compact_divider_before_truncating_text() {
+        let backend = TestBackend::new(90, 18);
+        let mut terminal = Terminal::new(backend).expect("terminal");
+        let mut state = demo_state(&Config::default());
+        state.overlay = Overlay::Help;
+        terminal
+            .draw(|frame| render(frame, &state))
+            .expect("render");
+        let text = buffer_text(terminal.backend().buffer());
+        assert!(text.contains("Overview, activity, and health"));
+        assert!(text.contains("Inventory and device inspector"));
+        assert!(text.contains(" │q"));
+    }
+
+    #[test]
     fn command_palette_scrolls_to_all_commands_and_opens_settings() {
         let matches = palette_matches("");
         assert_eq!(matches.len(), 23);
@@ -4675,7 +4973,7 @@ mod tests {
             .draw(|frame| render(frame, &state))
             .expect("render");
         let text = buffer_text(terminal.backend().buffer());
-        assert!(text.contains("Quit Lantern"));
+        assert!(text.contains("Quit Wireseer"));
         assert!(text.contains("23/23"));
 
         let config = Config::default();

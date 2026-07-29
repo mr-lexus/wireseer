@@ -8,7 +8,8 @@ use std::{
 
 use anyhow::{Context, Result};
 use clap::Parser;
-use lantern_tui::{
+use wireseer_tui::{
+    APP_NAME, BRAND_TRACE_UNICODE, VERSION,
     app::{AppRuntime, AppState, PersistenceEvent, demo_state},
     cli::{
         AlertsArgs, BaselineCommand, Cli, Command, ConfigCommand, DevicesArgs, ExportFormat,
@@ -33,7 +34,7 @@ async fn main() -> Result<()> {
     paths.ensure()?;
     let mut config = Config::load(&paths, cli.config.as_ref())?;
     let _log_guard = logging::init(&paths, &config.log_level, cli.verbose)?;
-    tracing::info!(version = lantern_tui::VERSION, "Lantern starting");
+    tracing::info!(version = VERSION, "Wireseer starting");
     match cli.command {
         None => {
             let persisted_icons = apply_icon_override(&mut config, cli.icons);
@@ -70,7 +71,7 @@ async fn open_tui(
 ) -> Result<()> {
     anyhow::ensure!(
         io::stdout().is_terminal(),
-        "Lantern's interactive view needs a terminal. Use `lantern scan` for non-interactive discovery."
+        "Wireseer's interactive view needs a terminal. Use `wireseer scan` for non-interactive discovery."
     );
     let store = HistoryStore::open(&paths.database_file)?;
     let pruned = store.prune(config.retention_days)?;
@@ -85,7 +86,7 @@ async fn open_tui(
         tracing::warn!(%error, "interface enumeration failed");
         Vec::new()
     });
-    let demo = std::env::var_os("LANTERN_DEMO").is_some();
+    let demo = std::env::var_os("WIRESEER_DEMO").is_some();
     let mut state = if demo {
         demo_state(&config)
     } else {
@@ -220,7 +221,7 @@ fn list_devices(paths: &AppPaths, args: DevicesArgs) -> Result<()> {
     let devices = load_devices_with_current_identity(&store)?
         .into_iter()
         .filter(|device| {
-            !args.online || device.status == lantern_tui::devices::DeviceStatus::Online
+            !args.online || device.status == wireseer_tui::devices::DeviceStatus::Online
         })
         .collect::<Vec<_>>();
     let mut writer = output_writer(args.output)?;
@@ -317,13 +318,13 @@ fn run_export(
         ExportKind::Baseline => {
             let baseline = store
                 .active_baseline()?
-                .context("no active baseline; run `lantern baseline create`")?;
+                .context("no active baseline; run `wireseer baseline create`")?;
             export::baseline(&baseline, format, &mut writer)?;
         }
         ExportKind::Comparison => {
             let baseline = store
                 .active_baseline()?
-                .context("no active baseline; run `lantern baseline create`")?;
+                .context("no active baseline; run `wireseer baseline create`")?;
             let devices = load_devices_with_current_identity(&store)?;
             export::comparison(&compare_baseline(&baseline, &devices), format, &mut writer)?;
         }
@@ -354,7 +355,7 @@ fn run_baseline(paths: &AppPaths, command: BaselineCommand) -> Result<()> {
         BaselineCommand::Compare => {
             let baseline = store
                 .active_baseline()?
-                .context("no active baseline; run `lantern baseline create`")?;
+                .context("no active baseline; run `wireseer baseline create`")?;
             let diff = compare_baseline(&baseline, &devices);
             println!(
                 "Baseline '{}' · {} unknown · {} missing · {} changed",
@@ -399,7 +400,7 @@ fn run_config(paths: &AppPaths, config: &Config, command: ConfigCommand) -> Resu
 }
 
 fn doctor(paths: &AppPaths, config: &Config) -> Result<()> {
-    println!("Lantern doctor {}\n", lantern_tui::VERSION);
+    println!("{APP_NAME} doctor {VERSION}  {BRAND_TRACE_UNICODE}\n");
     config.validate()?;
     check(
         "Configuration",
@@ -578,7 +579,7 @@ fn doctor(paths: &AppPaths, config: &Config) -> Result<()> {
 }
 
 async fn run_vendor(paths: &AppPaths, config: &mut Config, command: VendorCommand) -> Result<()> {
-    use lantern_tui::network::vendor::{VendorDatabase, import, update_official};
+    use wireseer_tui::network::vendor::{VendorDatabase, import, update_official};
     match command {
         VendorCommand::Import { source } => {
             let destination = paths.data_dir.join("vendors.csv");
@@ -608,7 +609,7 @@ async fn run_vendor(paths: &AppPaths, config: &mut Config, command: VendorComman
             let path = config
                 .vendor_database
                 .as_ref()
-                .context("no vendor database configured; run `lantern vendor update`")?;
+                .context("no vendor database configured; run `wireseer vendor update`")?;
             let database = VendorDatabase::load(path)?;
             println!("{} prefixes · {}", database.len(), path.display());
         }

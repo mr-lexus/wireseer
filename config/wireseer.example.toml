@@ -1,7 +1,7 @@
-# Lantern example configuration. Generate the platform-local file with:
-#   lantern config init
+# Wireseer example configuration. Generate the platform-local file with:
+#   wireseer config init
 
-# Optional. When absent, Lantern chooses the most likely active IPv4 interface.
+# Optional. When absent, Wireseer chooses the most likely active IPv4 interface.
 # interface = "eth0"
 # subnet = "192.168.1.0/24"
 
@@ -17,7 +17,7 @@ host_limit = 1024
 retention_days = 90
 # Also: catppuccin_mocha, catppuccin_latte, dracula, nord, midnight_blue, acid, paper_light,
 # high_contrast, monochrome, color_blind.
-theme = "lantern_dark"
+theme = "wireseer_dark"
 # Nerd Font glyphs are never enabled automatically; use nerd only for a configured terminal font.
 icons = "unicode"      # nerd | unicode | ascii
 animations = true

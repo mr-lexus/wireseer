@@ -935,7 +935,7 @@ async fn discover_ssdp(
     cancellation: &CancellationToken,
     found_ips: &mut BTreeSet<Ipv4Addr>,
 ) {
-    const REQUEST: &[u8] = b"M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 1\r\nST: ssdp:all\r\nUSER-AGENT: Lantern/0.1 UPnP/1.1\r\n\r\n";
+    const REQUEST: &[u8] = b"M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 1\r\nST: ssdp:all\r\nUSER-AGENT: Wireseer/0.1 UPnP/1.1\r\n\r\n";
     let socket = match tokio::net::UdpSocket::bind((Ipv4Addr::UNSPECIFIED, 0)).await {
         Ok(socket) => socket,
         Err(error) => {
@@ -1016,7 +1016,7 @@ async fn safe_http_metadata(
     cancellation: &CancellationToken,
 ) -> Option<HttpMetadata> {
     let request = format!(
-        "GET / HTTP/1.0\r\nHost: {ip}\r\nUser-Agent: Lantern/{}\r\nAccept: text/html,*/*;q=0.1\r\nConnection: close\r\n\r\n",
+        "GET / HTTP/1.0\r\nHost: {ip}\r\nUser-Agent: Wireseer/{}\r\nAccept: text/html,*/*;q=0.1\r\nConnection: close\r\n\r\n",
         crate::VERSION
     );
     let mut bytes = Vec::with_capacity(8_192);

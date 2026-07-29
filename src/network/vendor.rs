@@ -159,7 +159,7 @@ fn parse_mac(value: &str) -> Option<u64> {
 pub async fn update_official(destination: PathBuf) -> Result<VendorDatabase> {
     let client = reqwest::Client::builder()
         .connect_timeout(Duration::from_secs(10))
-        .user_agent(concat!("Lantern/", env!("CARGO_PKG_VERSION")))
+        .user_agent(concat!("Wireseer/", env!("CARGO_PKG_VERSION")))
         .build()
         .context("build IEEE registry HTTP client")?;
     let mut combined = String::new();

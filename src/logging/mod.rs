@@ -21,7 +21,7 @@ pub fn init(paths: &AppPaths, configured_level: &str, verbosity: u8) -> Result<L
     let filter = EnvFilter::try_from_default_env()
         .or_else(|_| EnvFilter::try_new(level))
         .context("configure log filter")?;
-    let log_path = paths.data_dir.join("lantern.log");
+    let log_path = paths.data_dir.join("wireseer.log");
     let file_is_writable = OpenOptions::new()
         .create(true)
         .append(true)
@@ -29,7 +29,7 @@ pub fn init(paths: &AppPaths, configured_level: &str, verbosity: u8) -> Result<L
         .is_ok();
     if file_is_writable {
         let appender = std::panic::catch_unwind(AssertUnwindSafe(|| {
-            tracing_appender::rolling::never(&paths.data_dir, "lantern.log")
+            tracing_appender::rolling::never(&paths.data_dir, "wireseer.log")
         }))
         .ok();
         if let Some(appender) = appender {

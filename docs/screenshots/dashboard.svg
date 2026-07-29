@@ -1,85 +1,197 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
-  <title id="title">Lantern network dashboard</title>
-  <desc id="desc">A dark, teal-accented terminal dashboard showing network counts, activity, health, recent events, and common services.</desc>
-  <rect width="1400" height="780" rx="18" fill="#0c1015"/>
-  <rect x="16" y="16" width="1368" height="748" rx="12" fill="#141a21" stroke="#394652" stroke-width="2"/>
-  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
-    <text x="48" y="62" fill="#3fbdbf" font-size="25" font-weight="700" letter-spacing="2">LANTERN</text>
-    <text x="119" y="62" fill="#9dacb8" font-size="17"></text>
-    <text x="820" y="60" fill="#9dacb8" font-size="17">en0 · 192.168.1.0/24</text>
-    <text x="1130" y="60" fill="#60707b" font-size="17">NORMAL</text>
-    <circle cx="1253" cy="53" r="6" fill="#67be7e"/>
-    <text x="1271" y="60" fill="#67be7e" font-size="17" font-weight="700">SCANNING</text>
-    <line x1="35" y1="82" x2="1365" y2="82" stroke="#3fbdbf" stroke-width="3"/>
-
-    <text x="55" y="122" fill="#3fbdbf" font-size="15" font-weight="700" letter-spacing="2">NETWORK</text>
-    <line x1="40" y1="133" x2="410" y2="133" stroke="#394652"/>
-    <text x="72" y="180" fill="#67be7e" font-size="30" font-weight="700">24</text>
-    <text x="128" y="178" fill="#9dacb8" font-size="18">online</text>
-    <text x="72" y="222" fill="#60707b" font-size="30" font-weight="700">3</text>
-    <text x="128" y="220" fill="#9dacb8" font-size="18">offline</text>
-    <text x="260" y="180" fill="#e0af5a" font-size="30" font-weight="700">2</text>
-    <text x="316" y="178" fill="#9dacb8" font-size="18">unknown</text>
-    <text x="260" y="222" fill="#679fd6" font-size="30" font-weight="700">4</text>
-    <text x="316" y="220" fill="#9dacb8" font-size="18">changed</text>
-    <rect x="62" y="256" width="325" height="18" rx="7" fill="#1d2730"/>
-    <rect x="62" y="256" width="247" height="18" rx="7" fill="#3fbdbf"/>
-    <text x="62" y="303" fill="#9dacb8" font-size="15">Discovering hosts</text>
-    <text x="334" y="303" fill="#e1e8ed" font-size="15" font-weight="700">76%</text>
-
-    <text x="455" y="122" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">DEVICE ACTIVITY</text>
-    <line x1="440" y1="133" x2="925" y2="133" stroke="#394652"/>
-    <polyline points="465,250 492,235 519,239 546,218 573,189 600,160 627,178 654,145 681,164 708,132 735,116 762,142 789,108 816,109 843,92 870,107"
-              fill="none" stroke="#3fbdbf" stroke-width="5" stroke-linejoin="round"/>
-    <path d="M465 250 L492 235 L519 239 L546 218 L573 189 L600 160 L627 178 L654 145 L681 164 L708 132 L735 116 L762 142 L789 108 L816 109 L843 92 L870 107 L870 270 L465 270 Z" fill="#3fbdbf" opacity="0.08"/>
-    <text x="465" y="295" fill="#60707b" font-size="15">Discovery</text>
-    <text x="580" y="295" fill="#9dacb8" font-size="15">TCP · DNS · mDNS · SSDP</text>
-    <text x="465" y="322" fill="#60707b" font-size="15">Active</text>
-    <text x="580" y="322" fill="#e1e8ed" font-size="15">18 probes · 24 found</text>
-
-    <text x="970" y="122" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">HEALTH</text>
-    <line x1="955" y1="133" x2="1355" y2="133" stroke="#394652"/>
-    <text x="982" y="178" fill="#9dacb8" font-size="17">Gateway</text>
-    <text x="1230" y="178" fill="#67be7e" font-size="17" font-weight="700">ONLINE</text>
-    <text x="982" y="216" fill="#9dacb8" font-size="17">Discovery</text>
-    <text x="1288" y="216" fill="#679fd6" font-size="17" font-weight="700">5</text>
-    <text x="982" y="254" fill="#9dacb8" font-size="17">Warnings</text>
-    <text x="1288" y="254" fill="#e0af5a" font-size="17" font-weight="700">2</text>
-    <text x="982" y="292" fill="#9dacb8" font-size="17">Scan queue</text>
-    <text x="1276" y="292" fill="#e1e8ed" font-size="17" font-weight="700">14</text>
-
-    <text x="55" y="384" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">RECENT EVENTS</text>
-    <line x1="40" y1="395" x2="925" y2="395" stroke="#394652"/>
-    <text x="62" y="441" fill="#60707b" font-size="16">12:42</text>
-    <text x="135" y="441" fill="#e0af5a" font-size="16" font-weight="700">NEW</text>
-    <text x="252" y="441" fill="#e1e8ed" font-size="17">Living room TV appeared</text>
-    <text x="660" y="441" fill="#60707b" font-size="16">192.168.1.48</text>
-    <rect x="46" y="459" width="866" height="1" fill="#1d2730"/>
-    <text x="62" y="498" fill="#60707b" font-size="16">12:39</text>
-    <text x="135" y="498" fill="#679fd6" font-size="16" font-weight="700">CHANGED</text>
-    <text x="252" y="498" fill="#e1e8ed" font-size="17">Home NAS · HTTPS added</text>
-    <text x="660" y="498" fill="#60707b" font-size="16">192.168.1.20</text>
-    <rect x="46" y="516" width="866" height="1" fill="#1d2730"/>
-    <text x="62" y="555" fill="#60707b" font-size="16">12:35</text>
-    <text x="135" y="555" fill="#60707b" font-size="16" font-weight="700">OFFLINE</text>
-    <text x="252" y="555" fill="#e1e8ed" font-size="17">Office printer</text>
-    <text x="660" y="555" fill="#60707b" font-size="16">last seen 8m ago</text>
-
-    <text x="970" y="384" fill="#60707b" font-size="15" font-weight="700" letter-spacing="2">COMMON SERVICES</text>
-    <line x1="955" y1="395" x2="1355" y2="395" stroke="#394652"/>
-    <rect x="982" y="438" width="252" height="20" rx="4" fill="#273d52"/>
-    <rect x="982" y="438" width="230" height="20" rx="4" fill="#679fd6" opacity="0.8"/>
-    <text x="992" y="454" fill="#f0fafa" font-size="14">HTTPS</text><text x="1250" y="454" fill="#e1e8ed" font-size="14">12</text>
-    <rect x="982" y="483" width="180" height="20" rx="4" fill="#679fd6" opacity="0.65"/>
-    <text x="992" y="499" fill="#f0fafa" font-size="14">SSH</text><text x="1178" y="499" fill="#e1e8ed" font-size="14">7</text>
-    <rect x="982" y="528" width="112" height="20" rx="4" fill="#679fd6" opacity="0.5"/>
-    <text x="992" y="544" fill="#f0fafa" font-size="14">SMB</text><text x="1110" y="544" fill="#e1e8ed" font-size="14">3</text>
-
-    <line x1="35" y1="698" x2="1365" y2="698" stroke="#394652"/>
-    <text x="50" y="735" fill="#3fbdbf" font-size="16" font-weight="700">r</text><text x="70" y="735" fill="#9dacb8" font-size="16">Rescan</text>
-    <text x="168" y="735" fill="#3fbdbf" font-size="16" font-weight="700">2</text><text x="188" y="735" fill="#9dacb8" font-size="16">Devices</text>
-    <text x="300" y="735" fill="#3fbdbf" font-size="16" font-weight="700">^P</text><text x="330" y="735" fill="#9dacb8" font-size="16">Commands</text>
-    <text x="465" y="735" fill="#3fbdbf" font-size="16" font-weight="700">?</text><text x="485" y="735" fill="#9dacb8" font-size="16">Help</text>
-    <text x="1180" y="735" fill="#60707b" font-size="16">27 devices · 2 alerts</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1496" height="856" viewBox="0 0 1496 856" role="img" aria-labelledby="title desc">
+  <title id="title">Wireseer Dashboard screen with mock network data</title>
+  <desc id="desc">Generated from Wireseer's built-in demo state. All hostnames, addresses, identifiers, events, and alerts are mock data; no network scan was performed.</desc>
+  <rect width="1496" height="856" rx="18" fill="#030508"/>
+  <rect x="12" y="12" width="1472" height="832" rx="12" fill="#070a0f" stroke="#283a46" stroke-width="2"/>
+  <g font-family="SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace" font-size="15">
+    <rect x="46" y="248" width="423" height="20" fill="#121e27"/>
+    <rect x="46" y="268" width="423" height="20" fill="#121e27"/>
+    <text x="28" y="63" fill="#ddeef4" font-weight="700" opacity="1"> WIRE</text>
+    <text x="73" y="63" fill="#3be6ff" font-weight="700" opacity="1">SEER</text>
+    <text x="109" y="63" fill="#3be6ff" font-weight="400" opacity="1">  ●──┬────●──╼</text>
+    <text x="1135" y="63" fill="#84a0ae" font-weight="400" opacity="1">demo0 · 192.0.2.0/24</text>
+    <text x="1333" y="63" fill="#445865" font-weight="400" opacity="1">NORMAL  ○ IDLE</text>
+    <text x="28" y="83" fill="#3be6ff" font-weight="400" opacity="1">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</text>
+    <text x="37" y="103" fill="#3be6ff" font-weight="700" opacity="1"> NETWORK</text>
+    <text x="118" y="103" fill="#3be6ff" font-weight="400" opacity="1">────────────────────────────────────────</text>
+    <text x="478" y="103" fill="#445865" font-weight="700" opacity="1"> DEVICE ACTIVITY</text>
+    <text x="631" y="103" fill="#283a46" font-weight="400" opacity="1">───────────────────────────────────────────────────</text>
+    <text x="1090" y="103" fill="#445865" font-weight="700" opacity="1"> HEALTH</text>
+    <text x="1162" y="103" fill="#283a46" font-weight="400" opacity="1">─────────────────────────────────</text>
+    <text x="46" y="123" fill="#5eeaaa" font-weight="700" opacity="1">  5</text>
+    <text x="73" y="123" fill="#84a0ae" font-weight="400" opacity="1">  Online</text>
+    <text x="487" y="123" fill="#3be6ff" font-weight="400" opacity="1">       ▁ ▂▅▄▆▆█▆</text>
+    <text x="1099" y="123" fill="#84a0ae" font-weight="400" opacity="1">Gateway</text>
+    <text x="1207" y="123" fill="#5eeaaa" font-weight="700" opacity="1">ONLINE</text>
+    <text x="46" y="143" fill="#445865" font-weight="700" opacity="1">  1</text>
+    <text x="73" y="143" fill="#84a0ae" font-weight="400" opacity="1">  Offline</text>
+    <text x="487" y="143" fill="#3be6ff" font-weight="400" opacity="1">   ▁▄▇▅█████████</text>
+    <text x="1099" y="143" fill="#84a0ae" font-weight="400" opacity="1">Discovery</text>
+    <text x="1207" y="143" fill="#8582ff" font-weight="700" opacity="1">0</text>
+    <text x="46" y="163" fill="#f5be4b" font-weight="700" opacity="1">  1</text>
+    <text x="73" y="163" fill="#84a0ae" font-weight="400" opacity="1">  Unknown</text>
+    <text x="487" y="163" fill="#3be6ff" font-weight="400" opacity="1">▇▇██████████████</text>
+    <text x="1099" y="163" fill="#84a0ae" font-weight="400" opacity="1">Warnings</text>
+    <text x="1207" y="163" fill="#f5be4b" font-weight="700" opacity="1">2</text>
+    <text x="46" y="183" fill="#8582ff" font-weight="700" opacity="1">  6</text>
+    <text x="73" y="183" fill="#84a0ae" font-weight="400" opacity="1">  Changed</text>
+    <text x="487" y="183" fill="#3be6ff" font-weight="400" opacity="1">████████████████</text>
+    <text x="1099" y="183" fill="#84a0ae" font-weight="400" opacity="1">Scan queue</text>
+    <text x="1207" y="183" fill="#ddeef4" font-weight="700" opacity="1">0</text>
+    <text x="487" y="203" fill="#445865" font-weight="400" opacity="1">Discovery</text>
+    <text x="586" y="203" fill="#84a0ae" font-weight="400" opacity="1">TCP · local</text>
+    <text x="487" y="223" fill="#445865" font-weight="400" opacity="1">Active</text>
+    <text x="586" y="223" fill="#ddeef4" font-weight="400" opacity="1">  0 probes ·   6 found</text>
+    <text x="46" y="283" fill="#3be6ff" font-weight="400" opacity="1">                   Scan idle</text>
+    <text x="37" y="303" fill="#445865" font-weight="700" opacity="1"> RECENT EVENTS</text>
+    <text x="172" y="303" fill="#283a46" font-weight="400" opacity="1">────────────────────────────────────────────────────────────────────────────────────────</text>
+    <text x="964" y="303" fill="#445865" font-weight="700" opacity="1"> COMMON SERVICES</text>
+    <text x="1117" y="303" fill="#283a46" font-weight="400" opacity="1">──────────────────────────────────────</text>
+    <text x="46" y="323" fill="#445865" font-weight="400" opacity="1">12:42</text>
+    <text x="109" y="323" fill="#f5be4b" font-weight="700" opacity="1">NEW</text>
+    <text x="190" y="323" fill="#ddeef4" font-weight="400" opacity="1">Living room TV appeared</text>
+    <text x="397" y="323" fill="#445865" font-weight="400" opacity="1">  First observed by TCP and mDNS · 192.0.2.48</text>
+    <text x="973" y="323" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="46" y="343" fill="#445865" font-weight="400" opacity="1">12:39</text>
+    <text x="109" y="343" fill="#8582ff" font-weight="700" opacity="1">CHANGED</text>
+    <text x="190" y="343" fill="#ddeef4" font-weight="400" opacity="1">Home NAS services changed</text>
+    <text x="415" y="343" fill="#445865" font-weight="400" opacity="1">  HTTPS 443 added</text>
+    <text x="973" y="343" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="46" y="363" fill="#445865" font-weight="400" opacity="1">12:35</text>
+    <text x="109" y="363" fill="#8582ff" font-weight="700" opacity="1">OFFLINE</text>
+    <text x="190" y="363" fill="#ddeef4" font-weight="400" opacity="1">Office printer went offline</text>
+    <text x="433" y="363" fill="#445865" font-weight="400" opacity="1">  Last seen 8 minutes ago</text>
+    <text x="973" y="363" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="383" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="403" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="423" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="443" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="463" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="463" fill="#8582ff" font-weight="400" opacity="1">▅▅▅▅▅</text>
+    <text x="1099" y="463" fill="#8582ff" font-weight="400" opacity="1">▅▅▅▅▅</text>
+    <text x="1162" y="463" fill="#8582ff" font-weight="400" opacity="1">▅▅▅▅▅</text>
+    <text x="1225" y="463" fill="#8582ff" font-weight="400" opacity="1">▅▅▅▅▅</text>
+    <text x="1288" y="463" fill="#8582ff" font-weight="400" opacity="1">▅▅▅▅▅</text>
+    <text x="973" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="483" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="503" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="523" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="543" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="563" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="583" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="603" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="623" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="643" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="663" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="683" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="703" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1036" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1099" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1162" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1225" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="1288" y="723" fill="#8582ff" font-weight="400" opacity="1">█████</text>
+    <text x="973" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="991" y="743" fill="#ddeef4" font-weight="700" opacity="1">3</text>
+    <text x="1000" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1036" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1054" y="743" fill="#ddeef4" font-weight="700" opacity="1">2</text>
+    <text x="1063" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1099" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1117" y="743" fill="#ddeef4" font-weight="700" opacity="1">2</text>
+    <text x="1126" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1162" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1180" y="743" fill="#ddeef4" font-weight="700" opacity="1">2</text>
+    <text x="1189" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1225" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1243" y="743" fill="#ddeef4" font-weight="700" opacity="1">2</text>
+    <text x="1252" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1288" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="1306" y="743" fill="#ddeef4" font-weight="700" opacity="1">2</text>
+    <text x="1315" y="743" fill="#8582ff" font-weight="400" opacity="1">██</text>
+    <text x="28" y="763" fill="#ddeef4" font-weight="400" opacity="1">                                                                                                         HTTPS  HTTP   Print   SMB    SSH   Web U</text>
+    <text x="28" y="783" fill="#283a46" font-weight="400" opacity="1">────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────</text>
+    <text x="37" y="803" fill="#3be6ff" font-weight="700" opacity="1">1</text>
+    <text x="46" y="803" fill="#ddeef4" font-weight="700" opacity="1"> Dashboard</text>
+    <text x="154" y="803" fill="#3be6ff" font-weight="700" opacity="1">2</text>
+    <text x="163" y="803" fill="#84a0ae" font-weight="400" opacity="1"> Devices</text>
+    <text x="253" y="803" fill="#3be6ff" font-weight="700" opacity="1">3</text>
+    <text x="262" y="803" fill="#84a0ae" font-weight="400" opacity="1"> History</text>
+    <text x="352" y="803" fill="#3be6ff" font-weight="700" opacity="1">4</text>
+    <text x="361" y="803" fill="#84a0ae" font-weight="400" opacity="1"> Compare</text>
+    <text x="451" y="803" fill="#3be6ff" font-weight="700" opacity="1">5</text>
+    <text x="460" y="803" fill="#84a0ae" font-weight="400" opacity="1"> Alerts</text>
+    <text x="541" y="803" fill="#3be6ff" font-weight="700" opacity="1">6</text>
+    <text x="550" y="803" fill="#84a0ae" font-weight="400" opacity="1"> Logs</text>
+    <text x="613" y="803" fill="#3be6ff" font-weight="700" opacity="1">7</text>
+    <text x="622" y="803" fill="#84a0ae" font-weight="400" opacity="1"> Settings</text>
+    <text x="37" y="823" fill="#3be6ff" font-weight="700" opacity="1">q</text>
+    <text x="46" y="823" fill="#84a0ae" font-weight="400" opacity="1"> Quit</text>
+    <text x="118" y="823" fill="#3be6ff" font-weight="700" opacity="1">?</text>
+    <text x="127" y="823" fill="#84a0ae" font-weight="400" opacity="1"> Help</text>
+    <text x="199" y="823" fill="#3be6ff" font-weight="700" opacity="1">Ctrl+P</text>
+    <text x="253" y="823" fill="#84a0ae" font-weight="400" opacity="1"> Commands</text>
+    <text x="361" y="823" fill="#3be6ff" font-weight="700" opacity="1">r</text>
+    <text x="370" y="823" fill="#84a0ae" font-weight="400" opacity="1"> Scan</text>
+    <text x="1279" y="823" fill="#445865" font-weight="400" opacity="1">6 devices · 2 alerts</text>
   </g>
 </svg>

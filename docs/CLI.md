@@ -1,8 +1,8 @@
-# Lantern CLI
+# Wireseer CLI
 
-Lantern's command-line interface is currently documented in English. Run `lantern --help` for
-the command catalogue and `lantern <command> --help` for command-specific options and examples.
-Running `lantern` without a command opens the interactive TUI.
+Wireseer's command-line interface is currently documented in English. Run `wireseer --help` for
+the command catalogue and `wireseer <command> --help` for command-specific options and examples.
+Running `wireseer` without a command opens the interactive TUI.
 
 ## Output contract
 
@@ -24,12 +24,12 @@ CSV output always includes a header row, even when no records match.
 ## Read stored data
 
 ```bash
-lantern devices
-lantern devices --online --format json
-lantern devices --format xml --output devices.xml
+wireseer devices
+wireseer devices --online --format json
+wireseer devices --format xml --output devices.xml
 
-lantern history --limit 500 --format csv --output history.csv
-lantern alerts --open --format json | jq '.[] | .summary'
+wireseer history --limit 500 --format csv --output history.csv
+wireseer alerts --open --format json | jq '.[] | .summary'
 ```
 
 Device JSON retains the complete structured inventory model, including services and discovery
@@ -48,9 +48,9 @@ XML documents are UTF-8 and use these roots:
 ## Scan once
 
 ```bash
-lantern scan --mode quick
-lantern scan --interface eth0 --format json
-lantern scan --subnet 192.168.1.0/24 --format xml --output scan.xml
+wireseer scan --mode quick
+wireseer scan --interface eth0 --format json
+wireseer scan --subnet 192.168.1.0/24 --format xml --output scan.xml
 ```
 
 A scan emits its final result only after all bounded providers finish. Discovery failures return a
@@ -61,33 +61,33 @@ nonzero status and do not emit a successful machine document.
 `export` supports `devices`, `history`, `alerts`, `baseline`, and `comparison` in JSON, XML, or CSV:
 
 ```bash
-lantern export --kind devices --format json
-lantern export --kind history --format xml --output history.xml
-lantern export --kind alerts --format json --output alerts.json
-lantern export --kind baseline --format csv --output baseline.csv
-lantern export --kind comparison --format json | jq '.changed'
+wireseer export --kind devices --format json
+wireseer export --kind history --format xml --output history.xml
+wireseer export --kind alerts --format json --output alerts.json
+wireseer export --kind baseline --format csv --output baseline.csv
+wireseer export --kind comparison --format json | jq '.changed'
 ```
 
 Baseline and comparison export require an active baseline. Create one after reviewing the current
 inventory:
 
 ```bash
-lantern baseline create --name "Known network"
+wireseer baseline create --name "Known network"
 ```
 
 ## Automation examples
 
 ```bash
 # Count stored devices without parsing a table.
-lantern devices --format json | jq 'length'
+wireseer devices --format json | jq 'length'
 
 # Keep only online devices in a JSON artifact.
-lantern devices --online --format json --output online-devices.json
+wireseer devices --online --format json --output online-devices.json
 
-# Fail a shell pipeline when Lantern cannot read or serialize its inventory.
+# Fail a shell pipeline when Wireseer cannot read or serialize its inventory.
 set -o pipefail
-lantern alerts --open --format json | jq -e 'all(.[]; .severity != "critical")'
+wireseer alerts --open --format json | jq -e 'all(.[]; .severity != "critical")'
 ```
 
-Lantern never scans unless a scan command or the interactive TUI explicitly starts discovery.
+Wireseer never scans unless a scan command or the interactive TUI explicitly starts discovery.
 The read and export commands operate on the local SQLite inventory.

@@ -1,16 +1,19 @@
 [package]
-name = "lantern-tui"
+name = "wireseer-tui"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
-description = "A calm, local-first network discovery and inventory TUI"
+description = "Local-first network discovery, identity, and history for the terminal"
 license = "MIT"
-repository = "https://github.com/example/lantern"
+repository = "https://github.com/example/wireseer"
+homepage = "https://github.com/example/wireseer"
+documentation = "https://docs.rs/wireseer-tui"
+readme = "README.md"
 keywords = ["network", "tui", "discovery", "monitoring", "lan"]
 categories = ["command-line-utilities", "network-programming"]
 
 [[bin]]
-name = "lantern"
+name = "wireseer"
 path = "src/main.rs"
 
 [dependencies]

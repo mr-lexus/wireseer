@@ -1,6 +1,6 @@
-# Lantern product and architecture plan
+# Wireseer product and architecture plan
 
-Lantern is a local-first, read-only network inventory for networks the operator owns or
+Wireseer is a local-first, read-only network inventory for networks the operator owns or
 is authorized to inspect. It never uploads discovered identifiers and it limits active
 discovery to conservative, cancellable connect checks.
 
@@ -42,7 +42,20 @@ Crate modules:
 
 ## Visual design system
 
-Lantern uses an unboxed page frame with a slim identity header, content surfaces separated
+The signature is a small signal path rather than a mascot or shield:
+
+```text
+WIRESEER  ●──┬────●──╼
+          local signal intelligence
+```
+
+`WIRE` is primary text, `SEER` and the live trace use the accent, and the branch suggests that one
+physical network exposes many independently observed devices. The mark uses ordinary Unicode and
+has the ASCII fallback `o--+----o-->`; it never depends on Nerd Font glyphs. The visual tone is
+instrument-grade rather than theatrical: graphite surfaces, cold cyan signal, restrained violet
+telemetry, compact uppercase labels, and no Matrix green, fake shell prompts, or ornamental code.
+
+Wireseer uses an unboxed page frame with a slim identity header, content surfaces separated
 by spacing or a single divider, and one contextual action bar. Focus is shown with an accent
 rule and selection background, not a maze of borders. Metric values reserve fixed widths so
 live updates do not shift neighboring content.
@@ -50,7 +63,7 @@ live updates do not shift neighboring content.
 Semantic theme tokens are `background`, `surface`, `surface_active`, `border`,
 `border_focused`, `text_primary`, `text_secondary`, `text_muted`, `accent`, `success`,
 `warning`, `danger`, `info`, `selection`, `selection_text`, `chart_primary`, and
-`chart_secondary`. Built-ins are Lantern Dark, Catppuccin Mocha/Latte, Dracula, Nord, Midnight
+`chart_secondary`. Built-ins are Wireseer Dark, Catppuccin Mocha/Latte, Dracula, Nord, Midnight
 Blue, Acid, Paper Light, High Contrast, Monochrome, and Color-Blind Friendly. Status always has a
 word or glyph shape in addition to color.
 
@@ -84,10 +97,13 @@ space before secondary metadata.
 
 ## Screen mockups
 
+All devices and events below are fictional. Addresses use the IETF TEST-NET-1 documentation range
+`192.0.2.0/24`; release screenshots are rendered from the same network-free demo state.
+
 ### Dashboard — wide
 
 ```text
- LANTERN  Home network · en0 · 192.168.1.0/24       WATCH  ● ACTIVE  00:04
+ WIRESEER  ●──┬────●──╼  Demo network · demo0 · 192.0.2.0/24  WATCH  ● ACTIVE
  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  NETWORK                    DEVICE ACTIVITY                   HEALTH
   24  online   3 offline    ▁▂▂▃▅▆▅▇▆▇█  +2 this hour        Gateway    ONLINE
@@ -106,15 +122,15 @@ space before secondary metadata.
 ### Devices / inspector — wide and standard
 
 ```text
- LANTERN / DEVICES                 6 total · 4 online      NORMAL  ● SCANNING
+ WIRESEER  ●──┬────●──╼ / DEVICES        6 total · 4 online      NORMAL  ● SCANNING
  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    / Search by name, IP, vendor, service…
  DEVICES                                      HOME NAS                         
- ● [NAS] Home NAS       192.168.1.20   2ms    Synology DS923+        ~ NAS 96%
- ● [PC]  Desktop        192.168.1.25  <1ms    IP       192.168.1.20
- ● [TV]  Living room    192.168.1.48  12ms    MAC      00:11:22:33:44:55
- ○ [P]   Office printer 192.168.1.70     —     Vendor   Synology
- ? [?]   Unknown        192.168.1.91   7ms
+ ● [NAS] Home NAS       192.0.2.20   2ms    Synology DS923+        ~ NAS 96%
+ ● [PC]  Desktop        192.0.2.25  <1ms    IP       192.0.2.20
+ ● [TV]  Living room    192.0.2.48  12ms    MAC      02:00:00:00:00:30
+ ○ [P]   Office printer 192.0.2.70     —     Vendor   Synology
+ ? [?]   Unknown        192.0.2.91   7ms
                                               SERVICES
                                               SSH  HTTP  HTTPS  SMB
                                               EVIDENCE
@@ -133,7 +149,7 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ```text
  < DEVICES / HOME NAS                        ONLINE · seen now · confidence 96%
  OVERVIEW              ADDRESSES                 SERVICES
- ~ NAS                 IPv4 192.168.1.20         22 SSH       open · 2ms
+ ~ NAS                 IPv4 192.0.2.20           22 SSH       open · 2ms
  Synology DS923+       MAC  00:11:22:33:44:55    443 HTTPS    open · 3ms
  user: Home NAS        Previous .18              445 SMB      observed mDNS
 
@@ -148,9 +164,9 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ### History
 
 ```text
- LANTERN / HISTORY               Filter: all · all devices · today
+ WIRESEER  ●──┬────●──╼ / HISTORY      Filter: all · all devices · today
  TODAY
-  12:42  + NEW DEVICE       Samsung TV                       192.168.1.48
+  12:42  + NEW DEVICE       Samsung TV                       192.0.2.48
           First observed by TCP and mDNS
   12:39  ~ SERVICES CHANGED Home NAS                         HTTPS added
   12:35  - OFFLINE          Office Printer                   seen 8m ago
@@ -163,7 +179,7 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ### Compare / baseline
 
 ```text
- LANTERN / COMPARE                  Current scan vs 12:30 · 3 differences
+ WIRESEER  ●──┬────●──╼ / COMPARE      Current scan vs 12:30 · 3 differences
  ADDED                         REMOVED                       CHANGED
  + Samsung TV .48             - Old laptop .32             ~ Home NAS
                                                              + HTTPS 443
@@ -178,10 +194,10 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ### Alerts
 
 ```text
- LANTERN / ALERTS                        2 active · 4 resolved
+ WIRESEER  ●──┬────●──╼ / ALERTS       2 active · 4 resolved
  ACTIVE
  ! WARNING  Unknown device appeared                         4 minutes ago
-            Samsung TV · 192.168.1.48 · first seen today
+            Samsung TV · 192.0.2.48 · first seen today
  x CRITICAL Gateway MAC changed                            12 minutes ago
             Review the old and new observed addresses
  RESOLVED
@@ -193,9 +209,9 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ### Logs
 
 ```text
- LANTERN / LOGS             level >= info · provider all · follow on
- 12:42:03 INFO  scan       device observed       ip=192.168.1.48 source=tcp
- 12:42:03 DEBUG dns        reverse lookup timed out ip=192.168.1.51
+ WIRESEER  ●──┬────●──╼ / LOGS         level >= info · provider all · follow on
+ 12:42:03 INFO  scan       device observed       ip=192.0.2.48 source=tcp
+ 12:42:03 DEBUG dns        reverse lookup timed out ip=192.0.2.51
  12:42:04 WARN  mdns       provider unavailable  reason=permission denied
  ─────────────────────────────────────────────────────────────────────────────
   / Search  l Level  p Provider  f Follow  c Clear view
@@ -204,9 +220,9 @@ Detailed uses two meaningful lines of facts; Compact keeps the primary facts on 
 ### Settings
 
 ```text
- LANTERN / SETTINGS
+ WIRESEER  ●──┬────●──╼ / SETTINGS
  APPEARANCE                         DISCOVERY
- > Theme          Lantern Dark      Scan mode       Normal
+ > Theme          Wireseer Dark      Scan mode       Normal
    Icons          Unicode           Refresh         30 s
    Animation      On                TCP checks      On
    Row density    Detailed          mDNS            On (available)
@@ -241,10 +257,10 @@ range and total count, so commands never disappear below the dialog edge.
 ### Empty, loading, and error states
 
 ```text
- NO DEVICES DISCOVERED YET        SCANNING 192.168.1.0/24       TCP UNAVAILABLE
+ NO DEVICES DISCOVERED YET        SCANNING 192.0.2.0/24         TCP UNAVAILABLE
  The scan is still running.       Hosts     ███████░ 58%        Permission denied.
  Check the interface or press r.  Enriching ███░░░░ 21%        DNS will continue.
-                                  Found 12 · active 18          Run `lantern doctor`.
+                                  Found 12 · active 18          Run `wireseer doctor`.
 ```
 
 ## Core contracts

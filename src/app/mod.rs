@@ -1047,7 +1047,7 @@ impl AppRuntime {
             return Ok(());
         }
         let interface = self.state.active_interface.clone().ok_or_else(|| {
-            anyhow::anyhow!("No IPv4 interface is available. Open `lantern doctor` for details.")
+            anyhow::anyhow!("No IPv4 interface is available. Open `wireseer doctor` for details.")
         })?;
         self.config.scan_mode = self.state.scan_mode;
         let spec = ScanSpec::from_config(&self.config, interface)?;
@@ -1135,42 +1135,42 @@ pub fn demo_state(config: &Config) -> AppState {
     let now = Utc::now();
     let descriptions = [
         (
-            [192, 168, 1, 1],
+            [192, 0, 2, 1],
             "Home gateway",
             Some("Ubiquiti"),
             &[80, 443][..],
             DeviceType::Gateway,
         ),
         (
-            [192, 168, 1, 20],
+            [192, 0, 2, 20],
             "Home NAS",
             Some("Synology"),
             &[22, 443, 445, 5000, 5001][..],
             DeviceType::Nas,
         ),
         (
-            [192, 168, 1, 25],
+            [192, 0, 2, 25],
             "Studio desktop",
             Some("Dell"),
             &[22, 445][..],
             DeviceType::Computer,
         ),
         (
-            [192, 168, 1, 48],
+            [192, 0, 2, 48],
             "Living room TV",
             Some("Samsung"),
             &[8008, 8009][..],
             DeviceType::SmartTv,
         ),
         (
-            [192, 168, 1, 70],
+            [192, 0, 2, 70],
             "Office printer",
             Some("Brother"),
             &[631, 9100][..],
             DeviceType::Printer,
         ),
         (
-            [192, 168, 1, 91],
+            [192, 0, 2, 91],
             "Unknown device",
             None,
             &[443][..],
@@ -1183,8 +1183,8 @@ pub fn demo_state(config: &Config) -> AppState {
             Ipv4Addr::from(*ip),
             ports[0],
             std::time::Duration::from_millis((number as u64 + 1) * 2),
-            "en0",
-            "192.168.1.0/24",
+            "demo0",
+            "192.0.2.0/24",
         );
         first.hostname = Some((*name).into());
         first.vendor = vendor.map(str::to_string);
@@ -1196,8 +1196,8 @@ pub fn demo_state(config: &Config) -> AppState {
                 device.ipv4,
                 *port,
                 std::time::Duration::from_millis(number as u64 + 1),
-                "en0",
-                "192.168.1.0/24",
+                "demo0",
+                "192.0.2.0/24",
             ));
         }
         device.device_type = *kind;
@@ -1212,10 +1212,10 @@ pub fn demo_state(config: &Config) -> AppState {
         devices.push(device);
     }
     let interface = NetworkInterface {
-        name: "en0".into(),
-        address: Ipv4Addr::new(192, 168, 1, 15),
+        name: "demo0".into(),
+        address: Ipv4Addr::new(192, 0, 2, 15),
         netmask: Ipv4Addr::new(255, 255, 255, 0),
-        subnet: "192.168.1.0/24".parse().expect("valid demo subnet"),
+        subnet: "192.0.2.0/24".parse().expect("valid demo subnet"),
         is_loopback: false,
         likely_active: true,
     };
@@ -1228,7 +1228,7 @@ pub fn demo_state(config: &Config) -> AppState {
             kind: EventKind::DeviceNew,
             severity: Severity::Warning,
             summary: "Living room TV appeared".into(),
-            detail: "First observed by TCP and mDNS · 192.168.1.48".into(),
+            detail: "First observed by TCP and mDNS · 192.0.2.48".into(),
         },
         TimelineEvent {
             id: Uuid::new_v4(),
@@ -1258,7 +1258,7 @@ pub fn demo_state(config: &Config) -> AppState {
             severity: Severity::Warning,
             rule: "unknown_device".into(),
             summary: "Unknown device appeared".into(),
-            detail: "192.168.1.91 · first seen today".into(),
+            detail: "192.0.2.91 · first seen today".into(),
             acknowledged: false,
         },
         Alert {
@@ -1371,6 +1371,18 @@ mod tests {
         }
         assert_eq!(state.selected, 0);
         assert!(state.selected_device().is_some());
+    }
+
+    #[test]
+    fn demo_state_uses_only_documentation_network_data() {
+        let state = demo_state(&Config::default());
+        assert!(state.devices.iter().all(|device| {
+            let octets = device.ipv4.octets();
+            octets[0..3] == [192, 0, 2]
+        }));
+        let interface = state.active_interface.expect("demo interface");
+        assert_eq!(interface.name, "demo0");
+        assert_eq!(interface.subnet.to_string(), "192.0.2.0/24");
     }
 
     #[test]
